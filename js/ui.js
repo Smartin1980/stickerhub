@@ -4,6 +4,7 @@ const pageNames = {
   dashboard: "Dashboard",
   country: "Länder",
   trades: "Tauschbörse",
+  import: "Import",
   statistics: "Statistik",
   profile: "Profil",
   admin: "Admin"
@@ -19,6 +20,7 @@ function navItems() {
     ["dashboard", `${root}dashboard.html`, "Übersicht", "⌂"],
     ["country", `${root}country.html`, "Länder", "▦"],
     ["trades", `${root}trades.html`, "Tauschen", "⇄"],
+    ["import", `${root}import.html`, "Import", "+"],
     ["statistics", `${root}pages/statistics.html`, "Statistik", "▥"],
     ["profile", `${root}profile.html`, "Profil", "●"]
   ];
@@ -121,4 +123,3 @@ export function collectionStats(stickers) {
   const completion = total ? Math.round((collected / total) * 100) : 0;
   return { total, owned, missing, duplicate, completion };
 }
-

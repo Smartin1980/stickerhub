@@ -46,6 +46,30 @@ SUI,2
 GER,1
 ```
 
+Angemeldete Benutzer können unter `import.html` ihre persönliche Sammlung
+importieren:
+
+```csv
+country_code,sticker_number,status
+SUI,2,missing
+GER,10,owned
+BRA,5,duplicate
+```
+
+Beim Modus **Fehlliste ersetzen** ist die Spalte `status` optional. Alle
+Sticker werden zunächst als vorhanden markiert; die importierten Einträge
+werden anschließend als fehlend gesetzt.
+
+Auf Smartphones kann eine Papierliste direkt fotografiert werden. Die
+Texterkennung läuft im Browser; der erkannte Text muss vor dem Import in der
+Vorschau kontrolliert werden.
+
+## Konto löschen
+
+Benutzer können ihr Konto im Profil dauerhaft löschen. Dabei werden über die
+Supabase-Funktion `delete_own_account()` auch Sammlung und Tauschangebote
+entfernt.
+
 ## Deployment auf Hostpoint
 
 Den gesamten Projektinhalt in das Webroot hochladen. Es wird kein PHP und kein

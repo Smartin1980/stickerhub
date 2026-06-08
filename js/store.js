@@ -179,6 +179,17 @@ export const store = {
     return data;
   },
 
+  async deleteAccount() {
+    const db = await client();
+    if (!db) {
+      localStorage.removeItem(STORAGE_KEY);
+      return;
+    }
+    const { error } = await db.rpc("delete_own_account");
+    if (error) throw error;
+    await db.auth.signOut({ scope: "local" });
+  },
+
   async getCollection() {
     const db = await client();
     if (!db) {
@@ -289,6 +300,36 @@ export const store = {
     const db = await client();
     if (!db) throw new Error("Der CSV-Import benötigt eine Supabase-Konfiguration.");
     const { data, error } = await db.rpc("import_stickers", { rows });
+    if (error) throw error;
+    return data;
+  },
+
+  async importUserCollection(rows, importMode) {
+    const db = await client();
+    if (!db) {
+      const state = readDemo();
+      if (importMode === "missing_replace") {
+        state.stickers.forEach((sticker) => {
+          state.statuses[sticker.id] = "owned";
+        });
+      }
+      rows.forEach((row) => {
+        const sticker = state.stickers.find((item) =>
+          item.countries.code === row.country_code &&
+          item.sticker_number === row.sticker_number
+        );
+        if (sticker) {
+          state.statuses[sticker.id] =
+            importMode === "missing_replace" ? "missing" : row.status;
+        }
+      });
+      writeDemo(state);
+      return { imported: rows.length, mode: importMode };
+    }
+    const { data, error } = await db.rpc("import_user_collection", {
+      rows,
+      import_mode: importMode
+    });
     if (error) throw error;
     return data;
   },

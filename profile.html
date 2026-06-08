@@ -33,12 +33,39 @@
               <div><span class="stat-label">Fehlend</span><strong class="stat-value" id="missing">0</strong></div>
               <div><span class="stat-label">Doppelt</span><strong class="stat-value" id="duplicate">0</strong></div>
             </div>
+            <a class="btn btn-secondary" href="import.html" style="width:100%;margin-top:24px">
+              Sammlung importieren oder fotografieren
+            </a>
           </section>
         </div>
+        <section class="card danger-zone" style="margin-top:20px">
+          <div>
+            <h2>Profil löschen</h2>
+            <p class="muted">Löscht dein Konto, deine Sammlung und alle Tauschangebote dauerhaft.</p>
+          </div>
+          <button class="btn btn-danger" id="open-delete-dialog" type="button">Konto löschen</button>
+        </section>
       </div>
     </main>
   </div>
+  <dialog class="dialog" id="delete-dialog">
+    <form class="form-stack" id="delete-account-form">
+      <div>
+        <p class="eyebrow">Unwiderruflich</p>
+        <h2>Konto endgültig löschen?</h2>
+        <p class="muted">Gib <strong>LÖSCHEN</strong> ein, um dein Konto und sämtliche Daten zu entfernen.</p>
+      </div>
+      <div class="field">
+        <label for="delete-confirmation">Bestätigung</label>
+        <input class="input" id="delete-confirmation" autocomplete="off" required>
+      </div>
+      <div class="dialog-actions">
+        <button class="btn btn-ghost" id="cancel-delete" type="button">Abbrechen</button>
+        <button class="btn btn-danger" id="confirm-delete" type="submit">Endgültig löschen</button>
+      </div>
+    </form>
+  </dialog>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script type="module" src="js/profile.js"></script>
+  <script type="module" src="js/profile.js?v=20260608-3"></script>
 </body>
 </html>

@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sammlung importieren | StickerHub</title>
+  <link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <main class="main">
+      <div class="content">
+        <header class="page-heading">
+          <div>
+            <p class="eyebrow">Schneller erfassen</p>
+            <h1>Sammlung importieren</h1>
+            <p class="muted">CSV-Datei einlesen oder eine Papierliste mit dem Smartphone fotografieren.</p>
+          </div>
+        </header>
+
+        <div class="grid two-column">
+          <section class="card">
+            <div class="import-tabs">
+              <button class="import-tab active" type="button" data-source="csv">CSV-Datei</button>
+              <button class="import-tab" type="button" data-source="photo">Foto / Kamera</button>
+            </div>
+
+            <div id="csv-panel">
+              <div class="field">
+                <label for="collection-csv">CSV auswählen</label>
+                <input class="input" id="collection-csv" type="file" accept=".csv,text/csv">
+              </div>
+              <p class="muted">Spalten: <code>country_code,sticker_number,status</code>. Status ist optional.</p>
+              <a class="btn btn-ghost" id="download-template" href="#" download="stickerhub-import.csv">
+                CSV-Vorlage herunterladen
+              </a>
+            </div>
+
+            <div id="photo-panel" hidden>
+              <input class="camera-input" id="camera-file" type="file" accept="image/*" capture="environment">
+              <label class="btn camera-label" for="camera-file">Liste fotografieren</label>
+              <img class="photo-preview" id="photo-preview" alt="Aufgenommene Liste" hidden>
+              <div class="ocr-progress" id="ocr-progress" hidden>
+                <div class="progress-meta"><span>Texterkennung</span><strong id="ocr-percent">0%</strong></div>
+                <div class="progress-track"><div class="progress-bar" id="ocr-bar"></div></div>
+              </div>
+              <div class="field" style="margin-top:16px">
+                <label for="recognized-text">Erkannter Text</label>
+                <textarea class="textarea" id="recognized-text"
+                  placeholder="Beispiel:&#10;SUI 2,3,6,7&#10;GER 1,5,10"></textarea>
+              </div>
+              <button class="btn btn-secondary" id="parse-text" type="button" style="width:100%;margin-top:12px">
+                Text auswerten
+              </button>
+              <p class="privacy-note">Das Foto wird direkt in deinem Browser verarbeitet und nicht hochgeladen.</p>
+            </div>
+
+            <hr style="border:0;border-top:1px solid var(--border);margin:24px 0">
+            <div class="field">
+              <label for="import-mode">Importart</label>
+              <select class="select" id="import-mode">
+                <option value="missing_replace">Fehlliste ersetzen</option>
+                <option value="merge">Status aus CSV ergänzen</option>
+              </select>
+            </div>
+            <p class="muted" id="mode-help">
+              Alle Sticker werden auf vorhanden gesetzt; die importierte Liste wird als fehlend markiert.
+            </p>
+            <button class="btn" id="import-collection" type="button" style="width:100%" disabled>
+              Sammlung importieren
+            </button>
+          </section>
+
+          <section class="card">
+            <div class="page-heading">
+              <div><p class="eyebrow">Kontrolle</p><h2>Vorschau</h2></div>
+              <strong id="row-count">0 Sticker</strong>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr><th>Land</th><th>Nummer</th><th>Status</th></tr></thead>
+                <tbody id="collection-preview"></tbody>
+              </table>
+            </div>
+            <div class="empty" id="collection-empty">Noch keine Liste eingelesen.</div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+  <script type="module" src="js/import.js?v=20260608-3"></script>
+</body>
+</html>

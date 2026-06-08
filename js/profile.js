@@ -1,8 +1,10 @@
-import { store } from "./store.js";
+import { store } from "./store.js?v=20260608-3";
 import { collectionStats, initials, initShell, setLoading, toast } from "./ui.js";
 
 const form = document.querySelector("#profile-form");
 const logoutButton = document.querySelector("#logout");
+const deleteDialog = document.querySelector("#delete-dialog");
+const deleteForm = document.querySelector("#delete-account-form");
 let profile;
 
 function setAvatar() {
@@ -43,6 +45,32 @@ form.addEventListener("submit", async (event) => {
 logoutButton.addEventListener("click", async () => {
   await store.signOut();
   location.href = "login.html";
+});
+
+document.querySelector("#open-delete-dialog").addEventListener("click", () => {
+  document.querySelector("#delete-confirmation").value = "";
+  deleteDialog.showModal();
+});
+
+document.querySelector("#cancel-delete").addEventListener("click", () => {
+  deleteDialog.close();
+});
+
+deleteForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  if (document.querySelector("#delete-confirmation").value.trim().toUpperCase() !== "LÖSCHEN") {
+    toast("Bitte gib LÖSCHEN vollständig ein.", "error");
+    return;
+  }
+  const button = document.querySelector("#confirm-delete");
+  setLoading(button, true, "Wird gelöscht...");
+  try {
+    await store.deleteAccount();
+    location.href = "index.html";
+  } catch (error) {
+    toast(error.message, "error");
+    setLoading(button, false);
+  }
 });
 
 async function loadProfile() {

@@ -20,6 +20,7 @@
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 
 html { scroll-behavior: smooth; }
 
@@ -340,7 +341,7 @@ p { line-height: 1.55; }
   position: fixed;
   inset: auto 10px 10px;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   padding: 8px;
   background: rgba(6, 19, 39, 0.96);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -406,8 +407,64 @@ table { width: 100%; border-collapse: collapse; }
 th, td { padding: 13px 12px; border-bottom: 1px solid var(--border); text-align: left; white-space: nowrap; }
 th { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; }
 
+.danger-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  border-color: rgba(217, 75, 93, 0.35);
+}
+.danger-zone h2, .danger-zone p { margin-bottom: 4px; }
+
+.dialog {
+  width: min(480px, calc(100% - 32px));
+  padding: 26px;
+  color: var(--text);
+  background: var(--white);
+  border: 0;
+  border-radius: 22px;
+  box-shadow: var(--shadow);
+}
+.dialog::backdrop { background: rgba(6, 19, 39, 0.72); backdrop-filter: blur(3px); }
+.dialog-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.import-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  padding: 5px;
+  margin-bottom: 20px;
+  background: var(--surface);
+  border-radius: 13px;
+}
+.import-tab {
+  min-height: 44px;
+  border: 0;
+  border-radius: 10px;
+  cursor: pointer;
+  background: transparent;
+  font-weight: 700;
+}
+.import-tab.active { background: var(--white); box-shadow: 0 3px 10px rgba(6, 19, 39, 0.08); }
+.camera-input { position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none; }
+.camera-label { width: 100%; cursor: pointer; }
+.photo-preview {
+  display: block;
+  width: 100%;
+  max-height: 360px;
+  margin-top: 14px;
+  object-fit: contain;
+  background: var(--surface);
+  border-radius: 14px;
+}
+.ocr-progress { margin-top: 14px; }
+.textarea { min-height: 180px; resize: vertical; }
+.privacy-note { padding: 12px 14px; color: var(--muted); background: var(--surface); border-radius: 12px; font-size: 13px; }
+
 @media (min-width: 640px) {
   .content { padding: 32px 28px; }
+  .danger-zone { flex-direction: row; align-items: center; }
   .page-heading { flex-direction: row; align-items: end; justify-content: space-between; }
   .toolbar { grid-template-columns: minmax(240px, 1fr) 180px 160px; align-items: end; }
   .stats-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
