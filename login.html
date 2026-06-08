@@ -34,7 +34,10 @@
           <input class="input" id="email" type="email" autocomplete="email" required placeholder="name@beispiel.ch">
         </div>
         <div class="field">
-          <label for="password">Passwort</label>
+          <div class="field-label-row">
+            <label for="password">Passwort</label>
+            <button class="text-button" id="forgot-password" type="button">Passwort vergessen?</button>
+          </div>
           <input class="input" id="password" type="password" autocomplete="current-password" minlength="6" required>
         </div>
         <button class="btn" id="submit-button" type="submit">Einloggen</button>
@@ -45,6 +48,6 @@
     </div>
   </main>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script type="module" src="js/auth.js?v=20260608-1"></script>
+  <script type="module" src="js/auth.js?v=20260608-2"></script>
 </body>
 </html>

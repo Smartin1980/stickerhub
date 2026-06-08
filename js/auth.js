@@ -1,4 +1,4 @@
-import { store } from "./store.js?v=20260608-1";
+import { store } from "./store.js?v=20260608-2";
 import { setLoading, toast } from "./ui.js";
 
 const form = document.querySelector("#auth-form");
@@ -6,6 +6,7 @@ const tabs = document.querySelectorAll(".auth-tab");
 const nameField = document.querySelector("#name-field");
 const submitButton = document.querySelector("#submit-button");
 const magicButton = document.querySelector("#magic-link");
+const forgotPasswordButton = document.querySelector("#forgot-password");
 const AUTH_COOLDOWN_SECONDS = 60;
 let mode = "login";
 let cooldownTimer;
@@ -57,6 +58,7 @@ tabs.forEach((tab) => {
     tabs.forEach((item) => item.classList.toggle("active", item === tab));
     const registering = mode === "register";
     nameField.hidden = !registering;
+    forgotPasswordButton.hidden = registering;
     document.querySelector("#display-name").required = registering;
     document.querySelector("#auth-eyebrow").textContent =
       registering ? "Neu bei StickerHub" : "Willkommen zurück";
@@ -64,6 +66,36 @@ tabs.forEach((tab) => {
       registering ? "Konto erstellen" : "Einloggen";
     submitButton.textContent = registering ? "Registrieren" : "Einloggen";
   });
+});
+
+forgotPasswordButton.addEventListener("click", async () => {
+  const email = document.querySelector("#email").value.trim();
+  if (!email) {
+    toast("Bitte gib zuerst deine E-Mail-Adresse ein.", "error");
+    document.querySelector("#email").focus();
+    return;
+  }
+
+  setLoading(forgotPasswordButton, true, "Wird gesendet...");
+  try {
+    await store.sendPasswordReset(email);
+    toast("Link zum Zurücksetzen wurde gesendet. Bitte prüfe auch den Spam-Ordner.");
+    setLoading(forgotPasswordButton, false);
+    startCooldown(forgotPasswordButton);
+  } catch (error) {
+    const isRateLimit =
+      Number(error?.status || 0) === 429 ||
+      String(error?.message || "").toLowerCase().includes("rate limit");
+    toast(authErrorMessage(error), "error");
+    if (isRateLimit) {
+      setLoading(forgotPasswordButton, false);
+      startCooldown(forgotPasswordButton);
+    }
+  } finally {
+    if (!forgotPasswordButton.disabled || forgotPasswordButton.textContent === "Wird gesendet...") {
+      setLoading(forgotPasswordButton, false);
+    }
+  }
 });
 
 form.addEventListener("submit", async (event) => {

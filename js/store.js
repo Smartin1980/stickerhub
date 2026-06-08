@@ -107,6 +107,40 @@ export const store = {
     return data;
   },
 
+  async sendPasswordReset(email) {
+    const db = await client();
+    if (!db) return;
+    const { data, error } = await db.auth.resetPasswordForEmail(email, {
+      redirectTo: new URL("reset-password.html", location.href).href
+    });
+    if (error) throw error;
+    return data;
+  },
+
+  async getRecoverySession() {
+    const db = await client();
+    if (!db) return { user: readDemo().user };
+
+    const code = new URLSearchParams(location.search).get("code");
+    if (code) {
+      const { error } = await db.auth.exchangeCodeForSession(code);
+      if (error) throw error;
+      history.replaceState({}, document.title, location.pathname);
+    }
+
+    const { data, error } = await db.auth.getSession();
+    if (error) throw error;
+    return data.session;
+  },
+
+  async updatePassword(password) {
+    const db = await client();
+    if (!db) return;
+    const { data, error } = await db.auth.updateUser({ password });
+    if (error) throw error;
+    return data;
+  },
+
   async signOut() {
     const db = await client();
     if (db) await db.auth.signOut();

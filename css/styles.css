@@ -248,6 +248,18 @@ p { line-height: 1.55; }
 
 .field { display: grid; gap: 7px; }
 .field label { font-size: 14px; font-weight: 700; }
+.field-label-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.text-button {
+  padding: 0;
+  color: var(--navy-700);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+}
+.text-button:hover { color: var(--gold); }
+.text-button:disabled { cursor: wait; opacity: 0.65; }
 .form-stack { display: grid; gap: 16px; }
 
 .btn {
