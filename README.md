@@ -11,8 +11,10 @@ Datenhaltung laufen über Supabase.
 2. Ohne Supabase-Konfiguration startet die App automatisch im Demo-Modus.
 3. Für den Produktivbetrieb ein Supabase-Projekt erstellen.
 4. `supabase/schema.sql` im Supabase SQL Editor ausführen.
-5. `supabase/seed.sql` ausführen.
-6. In `js/config.js` die Projekt-URL und den öffentlichen Anon-Key eintragen.
+5. Danach die Dateien unter `supabase/migrations/` in aufsteigender Reihenfolge
+   ausführen oder mit `npx supabase db push` anwenden.
+6. `supabase/seed.sql` ausführen.
+7. In `js/config.js` die Projekt-URL und den öffentlichen Anon-Key eintragen.
 
 ```js
 export const SUPABASE_URL = 'https://PROJECT.supabase.co';
@@ -69,6 +71,18 @@ Vorschau kontrolliert werden.
 Benutzer können ihr Konto im Profil dauerhaft löschen. Dabei werden über die
 Supabase-Funktion `delete_own_account()` auch Sammlung und Tauschangebote
 entfernt.
+
+## Friends & Family und Feature Toggles
+
+Administratoren verwalten unter `pages/admin.html`:
+
+- die Friends-&-Family-Freigabe pro Benutzer
+- Benutzer- und Administratorrollen
+- Features für Friends & Family oder alle Benutzer
+
+Administratoren haben unabhängig vom Toggle immer Zugriff. Der persönliche
+Sammlungsimport startet standardmäßig als Friends-&-Family-Test und ist für
+normale Benutzer deaktiviert.
 
 ## Deployment auf Hostpoint
 

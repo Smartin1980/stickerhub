@@ -1,5 +1,5 @@
-import { store } from "./store.js?v=20260608-3";
-import { collectionStats, initials, initShell, setLoading, toast } from "./ui.js";
+import { store } from "./store.js?v=20260608-6";
+import { collectionStats, initials, initShell, setLoading, toast } from "./ui.js?v=20260608-6";
 
 const form = document.querySelector("#profile-form");
 const logoutButton = document.querySelector("#logout");

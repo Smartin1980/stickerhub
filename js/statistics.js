@@ -1,5 +1,5 @@
-import { store } from "./store.js?v=20260608-5";
-import { escapeHtml, initShell, toast } from "./ui.js";
+import { store } from "./store.js?v=20260608-6";
+import { escapeHtml, initShell, toast } from "./ui.js?v=20260608-6";
 
 async function loadStatistics() {
   try {

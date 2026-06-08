@@ -1,5 +1,5 @@
-import { store } from "./store.js";
-import { collectionStats, escapeHtml, initShell, toast } from "./ui.js";
+import { store } from "./store.js?v=20260608-6";
+import { collectionStats, escapeHtml, initShell, toast } from "./ui.js?v=20260608-6";
 
 function countrySummary(country, stickers) {
   const items = stickers.filter((item) => item.country_id === country.id);
@@ -47,4 +47,3 @@ async function loadDashboard() {
 }
 
 loadDashboard();
-

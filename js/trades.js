@@ -1,5 +1,5 @@
-import { store } from "./store.js?v=20260608-4";
-import { escapeHtml, initials, initShell, toast } from "./ui.js";
+import { store } from "./store.js?v=20260608-6";
+import { escapeHtml, initials, initShell, toast } from "./ui.js?v=20260608-6";
 
 const grid = document.querySelector("#trade-grid");
 const countryFilter = document.querySelector("#country-filter");

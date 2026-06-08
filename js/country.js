@@ -1,6 +1,6 @@
 import { nextStatus, STATUS } from "./data.js";
-import { store } from "./store.js";
-import { collectionStats, escapeHtml, initShell, toast } from "./ui.js";
+import { store } from "./store.js?v=20260608-6";
+import { collectionStats, escapeHtml, initShell, toast } from "./ui.js?v=20260608-6";
 
 const countryGrid = document.querySelector("#country-grid");
 const stickerGrid = document.querySelector("#sticker-grid");

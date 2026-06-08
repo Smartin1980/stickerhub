@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Admin | StickerHub</title>
+  <title>Administration | StickerHub</title>
   <link rel="icon" href="../assets/logo-mark.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../css/styles.css">
 </head>
@@ -11,26 +11,76 @@
   <div class="app-shell">
     <main class="main">
       <div class="content">
-        <header class="page-heading"><div><p class="eyebrow">Verwaltung</p><h1>CSV Import</h1><p class="muted">Länder und Sticker gesammelt importieren.</p></div></header>
-        <div class="grid two-column">
-          <section class="card">
-            <h2>Datei auswählen</h2>
-            <form class="form-stack" id="import-form">
-              <div class="field"><label for="csv-file">CSV-Datei</label><input class="input" id="csv-file" type="file" accept=".csv,text/csv" required></div>
-              <button class="btn" type="submit">Import starten</button>
-            </form>
-            <p class="muted">Erwartete Spalten: <code>country_code,sticker_number</code></p>
-          </section>
-          <section class="card">
-            <h2>Vorschau</h2>
-            <div class="table-wrap"><table><thead><tr><th>Land</th><th>Nummer</th></tr></thead><tbody id="preview"></tbody></table></div>
-            <div class="empty" id="preview-empty">Noch keine Datei ausgewählt.</div>
-          </section>
+        <header class="page-heading">
+          <div>
+            <p class="eyebrow">Verwaltung</p>
+            <h1>Administration</h1>
+            <p class="muted">Benutzer, Testgruppen und Feature-Rollouts zentral verwalten.</p>
+          </div>
+        </header>
+
+        <div class="admin-tabs" role="tablist">
+          <button class="admin-tab active" type="button" data-panel="users-panel">Benutzer</button>
+          <button class="admin-tab" type="button" data-panel="features-panel">Feature Toggles</button>
+          <button class="admin-tab" type="button" data-panel="catalog-panel">Stickerkatalog</button>
         </div>
+
+        <section id="users-panel">
+          <article class="card">
+            <div class="page-heading">
+              <div>
+                <h2>Benutzerfreigaben</h2>
+                <p class="muted">Friends & Family erhält Zugriff auf Features in der Testphase.</p>
+              </div>
+              <input class="input admin-search" id="user-search" type="search"
+                placeholder="Name oder E-Mail suchen">
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Benutzer</th><th>Rolle</th><th>Friends & Family</th><th>Seit</th></tr>
+                </thead>
+                <tbody id="admin-users"></tbody>
+              </table>
+            </div>
+            <div class="empty" id="users-empty" hidden>Keine Benutzer gefunden.</div>
+          </article>
+        </section>
+
+        <section id="features-panel" hidden>
+          <div class="grid" id="feature-flags"></div>
+          <div class="empty" id="features-empty" hidden>Noch keine Feature Toggles vorhanden.</div>
+        </section>
+
+        <section id="catalog-panel" hidden>
+          <div class="grid two-column">
+            <article class="card">
+              <h2>Stickerkatalog importieren</h2>
+              <form class="form-stack" id="import-form">
+                <div class="field">
+                  <label for="csv-file">CSV-Datei</label>
+                  <input class="input" id="csv-file" type="file" accept=".csv,text/csv" required>
+                </div>
+                <button class="btn" type="submit">Import starten</button>
+              </form>
+              <p class="muted">Erwartete Spalten: <code>country_code,sticker_number</code></p>
+            </article>
+            <article class="card">
+              <h2>Vorschau</h2>
+              <div class="table-wrap">
+                <table>
+                  <thead><tr><th>Land</th><th>Nummer</th></tr></thead>
+                  <tbody id="preview"></tbody>
+                </table>
+              </div>
+              <div class="empty" id="preview-empty">Noch keine Datei ausgewählt.</div>
+            </article>
+          </div>
+        </section>
       </div>
     </main>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script type="module" src="../js/admin.js"></script>
+  <script type="module" src="../js/admin.js?v=20260608-6"></script>
 </body>
 </html>

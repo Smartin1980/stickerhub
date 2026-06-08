@@ -1,4 +1,4 @@
-import { store } from "./store.js";
+import { store } from "./store.js?v=20260608-6";
 
 const pageNames = {
   dashboard: "Dashboard",
@@ -20,7 +20,7 @@ function navItems() {
     ["dashboard", `${root}dashboard.html`, "Übersicht", "⌂"],
     ["country", `${root}country.html`, "Länder", "▦"],
     ["trades", `${root}trades.html`, "Tauschen", "⇄"],
-    ["import", `${root}import.html`, "Import", "+"],
+    ["import", `${root}import.html`, "Import", "+", "collection_import"],
     ["statistics", `${root}pages/statistics.html`, "Statistik", "▥"],
     ["profile", `${root}profile.html`, "Profil", "●"]
   ];
@@ -76,9 +76,14 @@ export async function initShell(activePage) {
     location.href = `${basePath()}login.html`;
     return null;
   }
-  const profile = await store.getProfile();
+  const [profile, featureFlags] = await Promise.all([
+    store.getProfile(),
+    store.getFeatureFlags()
+  ]);
   const root = basePath();
-  const links = navItems();
+  const links = navItems().filter(([, , , , featureKey]) =>
+    !featureKey || featureFlags[featureKey]
+  );
   const sidebar = `
     <aside class="sidebar">
       <a class="brand" href="${root}dashboard.html">
@@ -110,7 +115,17 @@ export async function initShell(activePage) {
   shell.insertAdjacentHTML("afterbegin", sidebar);
   document.querySelector(".main").insertAdjacentHTML("afterbegin", topbar);
   shell.insertAdjacentHTML("beforeend", mobile);
+  document.querySelectorAll("[data-feature]").forEach((element) => {
+    element.hidden = !featureFlags[element.dataset.feature];
+  });
   document.title = `${pageNames[activePage] || "StickerHub"} | StickerHub`;
+  if (activePage === "import" && !featureFlags.collection_import) {
+    toast("Dieses Feature ist für dein Konto noch nicht freigeschaltet.", "error");
+    setTimeout(() => {
+      location.href = `${root}dashboard.html`;
+    }, 600);
+    return null;
+  }
   return profile;
 }
 

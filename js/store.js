@@ -160,6 +160,65 @@ export const store = {
     return data;
   },
 
+  async getFeatureFlags() {
+    const db = await client();
+    if (!db) return { collection_import: true };
+    const { data, error } = await db.rpc("get_my_feature_flags");
+    if (error) throw error;
+    return Object.fromEntries(data.map((flag) => [flag.key, flag.enabled]));
+  },
+
+  async isFeatureEnabled(featureKey) {
+    const flags = await this.getFeatureFlags();
+    return Boolean(flags[featureKey]);
+  },
+
+  async getAdminUsers() {
+    const db = await client();
+    if (!db) return [readDemo().user];
+    const { data, error } = await db.rpc("admin_list_users");
+    if (error) throw error;
+    return data;
+  },
+
+  async setAdminUserAccess(userId, friendsFamily, role) {
+    const db = await client();
+    if (!db) return;
+    const { error } = await db.rpc("admin_set_user_access", {
+      target_user_id: userId,
+      friends_family: friendsFamily,
+      target_role: role
+    });
+    if (error) throw error;
+  },
+
+  async getAdminFeatureFlags() {
+    const db = await client();
+    if (!db) {
+      return [{
+        key: "collection_import",
+        name: "Sammlungsimport",
+        description: "CSV-Import und mobile Fotoerkennung.",
+        enabled_friends_family: true,
+        enabled_public: true
+      }];
+    }
+    const { data, error } = await db.rpc("admin_list_feature_flags");
+    if (error) throw error;
+    return data;
+  },
+
+  async updateAdminFeatureFlag(featureKey, friendsFamilyEnabled, publicEnabled) {
+    const db = await client();
+    if (!db) return;
+    const { error } = await db.rpc("admin_update_feature_flag", {
+      feature_key: featureKey,
+      friends_family_enabled: friendsFamilyEnabled,
+      public_enabled: publicEnabled
+    });
+    if (error) throw error;
+  },
+
   async updateProfile(changes) {
     const db = await client();
     if (!db) {
