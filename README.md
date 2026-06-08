@@ -15,8 +15,8 @@ Datenhaltung laufen über Supabase.
 6. In `js/config.js` die Projekt-URL und den öffentlichen Anon-Key eintragen.
 
 ```js
-export const SUPABASE_URL = "https://PROJECT.supabase.co";
-export const SUPABASE_ANON_KEY = "PUBLIC_ANON_KEY";
+export const SUPABASE_URL = 'https://PROJECT.supabase.co';
+export const SUPABASE_ANON_KEY = 'PUBLIC_ANON_KEY';
 ```
 
 ## Supabase Auth
@@ -58,4 +58,3 @@ Build-Schritt benötigt. Die HTML-Dateien müssen über HTTPS ausgeliefert werde
 - `pages/` - Admin und Statistik
 - `assets/` - statische Assets
 - `supabase/` - Datenbankschema und Seed
-
