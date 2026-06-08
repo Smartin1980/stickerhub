@@ -79,7 +79,10 @@ export const store = {
     const { data, error } = await db.auth.signUp({
       email,
       password,
-      options: { data: { display_name: displayName } }
+      options: {
+        data: { display_name: displayName },
+        emailRedirectTo: new URL("login.html", location.href).href
+      }
     });
     if (error) throw error;
     return data;

@@ -1,4 +1,4 @@
-import { store } from "./store.js";
+import { store } from "./store.js?v=20260608-1";
 import { setLoading, toast } from "./ui.js";
 
 const form = document.querySelector("#auth-form");
@@ -6,9 +6,50 @@ const tabs = document.querySelectorAll(".auth-tab");
 const nameField = document.querySelector("#name-field");
 const submitButton = document.querySelector("#submit-button");
 const magicButton = document.querySelector("#magic-link");
+const AUTH_COOLDOWN_SECONDS = 60;
 let mode = "login";
+let cooldownTimer;
 
 document.querySelector("#demo-note").hidden = !store.demoMode;
+
+function authErrorMessage(error) {
+  const message = String(error?.message || "").toLowerCase();
+  const status = Number(error?.status || 0);
+
+  if (status === 429 || message.includes("rate limit") || message.includes("too many")) {
+    return "Zu viele E-Mails wurden angefordert. Bitte warte mindestens eine Stunde oder versuche es später erneut.";
+  }
+  if (message.includes("already registered") || message.includes("already been registered")) {
+    return "Für diese E-Mail besteht bereits ein Konto. Bitte einloggen.";
+  }
+  if (message.includes("invalid login credentials")) {
+    return "E-Mail oder Passwort ist nicht korrekt.";
+  }
+  if (message.includes("email not confirmed")) {
+    return "Bitte bestätige zuerst deine E-Mail-Adresse.";
+  }
+  if (message.includes("password")) {
+    return "Das Passwort erfüllt die Sicherheitsanforderungen nicht.";
+  }
+  return error?.message || "Die Anfrage konnte nicht verarbeitet werden.";
+}
+
+function startCooldown(button) {
+  clearInterval(cooldownTimer);
+  let remaining = AUTH_COOLDOWN_SECONDS;
+  const originalLabel = button.dataset.label || button.textContent;
+  button.disabled = true;
+  button.textContent = `Erneut in ${remaining}s`;
+  cooldownTimer = setInterval(() => {
+    remaining -= 1;
+    button.textContent = `Erneut in ${remaining}s`;
+    if (remaining <= 0) {
+      clearInterval(cooldownTimer);
+      button.textContent = originalLabel;
+      button.disabled = false;
+    }
+  }, 1000);
+}
 
 tabs.forEach((tab) => {
   tab.addEventListener("click", () => {
@@ -35,7 +76,9 @@ form.addEventListener("submit", async (event) => {
       const name = document.querySelector("#display-name").value.trim();
       const result = await store.signUp(email, password, name);
       if (!result.session && !store.demoMode) {
-        toast("Bestätigungslink wurde per E-Mail gesendet.");
+        toast("Bestätigungslink wurde gesendet. Bitte prüfe auch den Spam-Ordner.");
+        setLoading(submitButton, false);
+        startCooldown(submitButton);
         return;
       }
     } else {
@@ -43,9 +86,18 @@ form.addEventListener("submit", async (event) => {
     }
     location.href = "dashboard.html";
   } catch (error) {
-    toast(error.message, "error");
+    const isRateLimit =
+      Number(error?.status || 0) === 429 ||
+      String(error?.message || "").toLowerCase().includes("rate limit");
+    toast(authErrorMessage(error), "error");
+    if (isRateLimit) {
+      setLoading(submitButton, false);
+      startCooldown(submitButton);
+    }
   } finally {
-    setLoading(submitButton, false);
+    if (!submitButton.disabled || submitButton.textContent === "Wird geladen...") {
+      setLoading(submitButton, false);
+    }
   }
 });
 
@@ -59,11 +111,23 @@ magicButton.addEventListener("click", async () => {
   try {
     await store.sendMagicLink(email);
     if (store.demoMode) location.href = "dashboard.html";
-    else toast("Magic Link wurde versendet.");
+    else {
+      toast("Magic Link wurde versendet. Bitte prüfe auch den Spam-Ordner.");
+      setLoading(magicButton, false);
+      startCooldown(magicButton);
+    }
   } catch (error) {
-    toast(error.message, "error");
+    const isRateLimit =
+      Number(error?.status || 0) === 429 ||
+      String(error?.message || "").toLowerCase().includes("rate limit");
+    toast(authErrorMessage(error), "error");
+    if (isRateLimit) {
+      setLoading(magicButton, false);
+      startCooldown(magicButton);
+    }
   } finally {
-    setLoading(magicButton, false);
+    if (!magicButton.disabled || magicButton.textContent === "Wird geladen...") {
+      setLoading(magicButton, false);
+    }
   }
 });
-
