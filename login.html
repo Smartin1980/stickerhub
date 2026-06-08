@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login | StickerHub</title>
+  <link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="auth-page">
+  <section class="auth-showcase">
+    <div class="auth-showcase-content">
+      <a class="brand" href="index.html"><span class="brand-mark">SH</span> StickerHub</a>
+      <p class="eyebrow" style="margin-top:80px">FIFA World Cup 2026</p>
+      <h1>Das Album ist groß. Dein Überblick bleibt klar.</h1>
+      <p>Verwalte alle Länder, Nummern und Tauschsticker in einer modernen Sammlung.</p>
+    </div>
+  </section>
+  <main class="auth-panel">
+    <div class="auth-card">
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-mode="login">Login</button>
+        <button class="auth-tab" data-mode="register">Registrieren</button>
+      </div>
+      <p class="eyebrow" id="auth-eyebrow">Willkommen zurück</p>
+      <h1 id="auth-title">Einloggen</h1>
+      <form class="form-stack" id="auth-form">
+        <div class="field" id="name-field" hidden>
+          <label for="display-name">Benutzername</label>
+          <input class="input" id="display-name" autocomplete="name" placeholder="Dein Sammlername">
+        </div>
+        <div class="field">
+          <label for="email">E-Mail</label>
+          <input class="input" id="email" type="email" autocomplete="email" required placeholder="name@beispiel.ch">
+        </div>
+        <div class="field">
+          <label for="password">Passwort</label>
+          <input class="input" id="password" type="password" autocomplete="current-password" minlength="6" required>
+        </div>
+        <button class="btn" id="submit-button" type="submit">Einloggen</button>
+      </form>
+      <div class="divider">oder</div>
+      <button class="btn btn-ghost" id="magic-link" style="width:100%">Magic Link senden</button>
+      <div class="demo-note" id="demo-note" hidden>Demo-Modus aktiv: Beliebige E-Mail und Passwort verwenden.</div>
+    </div>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="js/auth.js"></script>
+</body>
+</html>

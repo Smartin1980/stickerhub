@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Profil | StickerHub</title>
+  <link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <main class="main">
+      <div class="content">
+        <header class="page-heading"><div><p class="eyebrow">Dein Konto</p><h1>Profil</h1></div></header>
+        <div class="grid two-column">
+          <section class="card">
+            <div class="profile-header">
+              <div class="avatar" id="profile-avatar">SH</div>
+              <div><h2 id="profile-name">Sammler</h2><p class="muted" id="profile-email"></p></div>
+            </div>
+            <form class="form-stack" id="profile-form" style="margin-top:28px">
+              <div class="field"><label for="display-name">Benutzername</label><input class="input" id="display-name" required></div>
+              <div class="field"><label for="avatar-url">Avatar URL</label><input class="input" id="avatar-url" type="url" placeholder="https://..."></div>
+              <button class="btn" type="submit">Profil speichern</button>
+              <button class="btn btn-danger" id="logout" type="button">Ausloggen</button>
+            </form>
+          </section>
+          <section class="card">
+            <h2>Sammlungsstand</h2>
+            <div class="progress-meta"><span>Fortschritt</span><strong id="completion">0%</strong></div>
+            <div class="progress-track"><div class="progress-bar" id="progress"></div></div>
+            <div class="grid" style="grid-template-columns:1fr 1fr;margin-top:24px">
+              <div><span class="stat-label">Fehlend</span><strong class="stat-value" id="missing">0</strong></div>
+              <div><span class="stat-label">Doppelt</span><strong class="stat-value" id="duplicate">0</strong></div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="js/profile.js"></script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tauschbörse | StickerHub</title>
+  <link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <main class="main">
+      <div class="content">
+        <header class="page-heading"><div><p class="eyebrow">Community</p><h1>Tauschbörse</h1><p class="muted">Finde doppelte Sticker anderer Sammler.</p></div></header>
+        <div class="toolbar">
+          <div class="field"><label for="trade-search">Suche</label><input class="input" id="trade-search" type="search" placeholder="Land, Kürzel oder Benutzer"></div>
+          <div class="field"><label for="country-filter">Land</label><select class="select" id="country-filter"><option value="">Alle Länder</option></select></div>
+          <div class="field"><label for="number-filter">Nummer</label><input class="input" id="number-filter" type="number" min="1" placeholder="z.B. 10"></div>
+        </div>
+        <div class="grid trade-grid" id="trade-grid"></div>
+        <div class="empty" id="empty" hidden>Keine Tauschangebote gefunden.</div>
+      </div>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="js/trades.js"></script>
+</body>
+</html>

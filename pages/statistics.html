@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Statistik | StickerHub</title>
+  <link rel="icon" href="../assets/logo-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <main class="main">
+      <div class="content">
+        <header class="page-heading"><div><p class="eyebrow">Rangliste</p><h1>Community-Statistik</h1><p class="muted">Die aktivsten Sammler im Überblick.</p></div></header>
+        <div class="grid two-column">
+          <section class="card chart-wrap"><h2>Top 10 Fortschritt</h2><canvas id="completion-chart"></canvas></section>
+          <section class="card chart-wrap"><h2>Sticker-Verteilung</h2><canvas id="collection-chart"></canvas></section>
+        </div>
+        <section class="card" style="margin-top:20px">
+          <h2>Bestenliste</h2>
+          <div class="table-wrap"><table><thead><tr><th>Rang</th><th>Benutzer</th><th>Fortschritt</th><th>Doppelt</th><th>Fehlend</th></tr></thead><tbody id="ranking"></tbody></table></div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <script type="module" src="../js/statistics.js"></script>
+</body>
+</html>

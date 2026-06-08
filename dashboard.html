@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard | StickerHub</title>
+  <link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <main class="main">
+      <div class="content">
+        <section class="hero">
+          <p class="eyebrow">Deine Sammlung</p>
+          <h1 id="welcome">Willkommen zurück</h1>
+          <p>Jeder Sticker bringt dich dem vollständigen Album näher. Hier siehst du deinen aktuellen Stand.</p>
+        </section>
+        <section class="grid stats-grid" aria-label="Sammlungsstatistik">
+          <article class="card stat-card"><span class="stat-accent"></span><span class="stat-label">Sticker insgesamt</span><strong class="stat-value" id="total">0</strong></article>
+          <article class="card stat-card owned"><span class="stat-accent"></span><span class="stat-label">Vorhanden</span><strong class="stat-value" id="owned">0</strong></article>
+          <article class="card stat-card missing"><span class="stat-accent"></span><span class="stat-label">Fehlend</span><strong class="stat-value" id="missing">0</strong></article>
+          <article class="card stat-card duplicate"><span class="stat-accent"></span><span class="stat-label">Doppelt</span><strong class="stat-value" id="duplicate">0</strong></article>
+        </section>
+        <section class="grid two-column">
+          <article class="card">
+            <h2>Albumfortschritt</h2>
+            <div class="progress-meta"><span>Gesammelt</span><strong id="completion">0%</strong></div>
+            <div class="progress-track"><div class="progress-bar" id="progress"></div></div>
+            <p class="muted" id="progress-copy">Sammlung wird geladen...</p>
+          </article>
+          <article class="card">
+            <h2>Schnellzugriff</h2>
+            <div class="form-stack">
+              <a class="btn" href="country.html">Sticker verwalten</a>
+              <a class="btn btn-secondary" href="trades.html">Tauschbörse öffnen</a>
+            </div>
+          </article>
+        </section>
+        <section style="margin-top:28px">
+          <div class="page-heading"><div><p class="eyebrow">Fast geschafft</p><h2>Länderfortschritt</h2></div><a href="country.html">Alle Länder →</a></div>
+          <div class="grid country-grid" id="country-preview"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="js/dashboard.js"></script>
+</body>
+</html>

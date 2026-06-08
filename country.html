@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Länder | StickerHub</title>
+  <link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <main class="main">
+      <div class="content">
+        <header class="page-heading">
+          <div><p class="eyebrow">Album</p><h1 id="page-title">Länderübersicht</h1><p class="muted" id="page-copy">Wähle ein Land und verwalte deine Sticker.</p></div>
+          <a class="btn btn-ghost" id="back-link" href="country.html" hidden>Alle Länder</a>
+        </header>
+        <div class="toolbar">
+          <div class="field"><label for="search">Sticker suchen</label><input class="input" id="search" type="search" placeholder="Land, Kürzel oder Nummer"></div>
+          <div class="field"><label for="status-filter">Status</label><select class="select" id="status-filter"><option value="">Alle Status</option><option value="owned">Vorhanden</option><option value="missing">Fehlend</option><option value="duplicate">Doppelt</option></select></div>
+        </div>
+        <div class="legend" id="legend" hidden>
+          <span class="legend-item"><span class="dot owned"></span>Vorhanden</span>
+          <span class="legend-item"><span class="dot missing"></span>Fehlt</span>
+          <span class="legend-item"><span class="dot duplicate"></span>Doppelt</span>
+        </div>
+        <div class="grid country-grid" id="country-grid"></div>
+        <div class="sticker-grid" id="sticker-grid"></div>
+        <div class="empty" id="empty" hidden>Keine passenden Sticker gefunden.</div>
+      </div>
+    </main>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script type="module" src="js/country.js"></script>
+</body>
+</html>
