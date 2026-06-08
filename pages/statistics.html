@@ -13,8 +13,14 @@
       <div class="content">
         <header class="page-heading"><div><p class="eyebrow">Rangliste</p><h1>Community-Statistik</h1><p class="muted">Die aktivsten Sammler im Überblick.</p></div></header>
         <div class="grid two-column">
-          <section class="card chart-wrap"><h2>Top 10 Fortschritt</h2><canvas id="completion-chart"></canvas></section>
-          <section class="card chart-wrap"><h2>Sticker-Verteilung</h2><canvas id="collection-chart"></canvas></section>
+          <section class="card">
+            <h2>Top 10 Fortschritt</h2>
+            <div class="chart-wrap"><canvas id="completion-chart"></canvas></div>
+          </section>
+          <section class="card">
+            <h2>Sticker-Verteilung</h2>
+            <div class="chart-wrap"><canvas id="collection-chart"></canvas></div>
+          </section>
         </div>
         <section class="card" style="margin-top:20px">
           <h2>Bestenliste</h2>
@@ -25,6 +31,6 @@
   </div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
-  <script type="module" src="../js/statistics.js"></script>
+  <script type="module" src="../js/statistics.js?v=20260608-5"></script>
 </body>
 </html>

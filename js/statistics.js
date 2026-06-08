@@ -1,4 +1,4 @@
-import { store } from "./store.js";
+import { store } from "./store.js?v=20260608-5";
 import { escapeHtml, initShell, toast } from "./ui.js";
 
 async function loadStatistics() {
@@ -38,4 +38,3 @@ async function loadStatistics() {
 }
 
 loadStatistics();
-
