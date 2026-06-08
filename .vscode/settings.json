@@ -1,6 +1,6 @@
 {
   "terminal.integrated.inheritEnv": true,
   "terminal.integrated.env.windows": {
-    "PATH": "C:\\Users\\marti\\Documents\\myProjects\\stickerhub\\.tools\\node-portable\\node-v24.16.0-win-x64;${env:PATH}"
+    "PATH": "${workspaceFolder}\\.tools\\node-portable\\node-v24.16.0-win-x64;${env:PATH}"
   }
 }
