@@ -1,4 +1,4 @@
-import { store } from "./store.js";
+import { store } from "./store.js?v=20260608-4";
 import { escapeHtml, initials, initShell, toast } from "./ui.js";
 
 const grid = document.querySelector("#trade-grid");
@@ -6,6 +6,22 @@ const countryFilter = document.querySelector("#country-filter");
 const numberFilter = document.querySelector("#number-filter");
 const search = document.querySelector("#trade-search");
 let trades = [];
+
+function safeAvatarUrl(value) {
+  if (!value) return "";
+  try {
+    const url = new URL(value);
+    return ["http:", "https:"].includes(url.protocol) ? url.href : "";
+  } catch {
+    return "";
+  }
+}
+
+function avatarMarkup(profile, owner) {
+  const avatarUrl = safeAvatarUrl(profile?.avatar_url);
+  if (!avatarUrl) return escapeHtml(initials(owner));
+  return `<img src="${escapeHtml(avatarUrl)}" alt="" data-avatar-fallback="${escapeHtml(initials(owner))}">`;
+}
 
 function render() {
   const term = search.value.trim().toLowerCase();
@@ -23,10 +39,15 @@ function render() {
     return `
       <article class="card">
         <div class="trade-sticker"><div><span>${escapeHtml(sticker.countries.name)}</span><br><strong>${escapeHtml(sticker.countries.code)}-${sticker.sticker_number}</strong></div></div>
-        <div class="trade-owner"><span class="avatar">${initials(owner)}</span><div><strong>${escapeHtml(owner)}</strong><br><span class="muted">Bietet diesen Sticker</span></div></div>
+        <div class="trade-owner"><span class="avatar">${avatarMarkup(trade.profiles, owner)}</span><div><strong>${escapeHtml(owner)}</strong><br><span class="muted">Bietet diesen Sticker</span></div></div>
         <button class="btn btn-ghost contact-button" type="button" style="width:100%;margin-top:16px">Tauschanfrage</button>
       </article>`;
   }).join("");
+  grid.querySelectorAll("[data-avatar-fallback]").forEach((image) => {
+    image.addEventListener("error", () => {
+      image.parentElement.textContent = image.dataset.avatarFallback;
+    }, { once: true });
+  });
   document.querySelector("#empty").hidden = filtered.length > 0;
 }
 
@@ -57,4 +78,3 @@ async function loadTrades() {
 }
 
 loadTrades();
-

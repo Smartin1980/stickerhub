@@ -254,7 +254,10 @@ export const store = {
           sticker_id: sticker.id,
           status: "available",
           stickers: sticker,
-          profiles: { display_name: index % 2 ? "Nina Goal" : "Marco Cards" }
+          profiles: {
+            display_name: index % 2 ? "Nina Goal" : state.user.display_name,
+            avatar_url: index % 2 ? "" : state.user.avatar_url
+          }
         }));
       return generated.filter((trade) =>
         (!filters.country || trade.stickers.countries.code === filters.country) &&
@@ -263,7 +266,7 @@ export const store = {
     }
     let query = db
       .from("trades")
-      .select("*, stickers(*, countries(*)), profiles!trades_owner_user_id_fkey(display_name)")
+      .select("*, stickers(*, countries(*)), profiles!trades_owner_user_id_fkey(display_name,avatar_url)")
       .eq("status", "available");
     const { data, error } = await query.order("created_at", { ascending: false });
     if (error) throw error;
