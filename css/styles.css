@@ -507,10 +507,51 @@ th { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spa
 .whatsapp-btn { color: var(--white); background: #168a4d; }
 .quick-export-actions {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  gap: 6px;
+  padding: 8px;
+  background: var(--surface);
+  border-radius: 12px;
 }
-.quick-export-actions .btn { min-height: 42px; padding: 0 10px; font-size: 12px; }
+.quick-export-row {
+  display: grid;
+  grid-template-columns: minmax(68px, 1fr) auto auto;
+  align-items: center;
+  gap: 6px;
+}
+.quick-export-row strong { font-size: 12px; }
+.quick-export-btn {
+  min-height: 32px;
+  padding: 0 9px;
+  color: var(--navy-800);
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 800;
+}
+.quick-export-btn.whatsapp { color: var(--white); background: #168a4d; border-color: #168a4d; }
+.country-card-favorite { position: relative; }
+.country-card-favorite > a { display: block; }
+.favorite-button {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  color: #aab4c3;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 19px;
+  line-height: 1;
+  z-index: 2;
+}
+.favorite-button.active { color: var(--gold); background: #fff8e8; border-color: var(--gold); }
+.favorite-button:disabled { cursor: wait; opacity: 0.6; }
 .compact-heading { align-items: flex-start; margin-bottom: 16px; }
 .catalog-admin-layout { grid-template-columns: 1fr; }
 .catalog-country-list {

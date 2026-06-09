@@ -1,4 +1,4 @@
-import { store } from "./store.js?v=20260610-1";
+import { store } from "./store.js?v=20260610-2";
 
 const pageNames = {
   dashboard: "Dashboard",

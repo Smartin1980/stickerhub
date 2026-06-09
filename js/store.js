@@ -373,6 +373,48 @@ export const store = {
     };
   },
 
+  async getCountryFavorites() {
+    const db = await client();
+    if (!db) {
+      const saved = JSON.parse(localStorage.getItem(`${STORAGE_KEY}-country-favorites`) || "[]");
+      return saved;
+    }
+    const session = await this.getSession();
+    const { data, error } = await db
+      .from("user_country_favorites")
+      .select("country_id")
+      .eq("user_id", session.user.id);
+    if (error) throw error;
+    return data.map((item) => item.country_id);
+  },
+
+  async setCountryFavorite(countryId, favorite) {
+    const db = await client();
+    if (!db) {
+      const key = `${STORAGE_KEY}-country-favorites`;
+      const saved = new Set(JSON.parse(localStorage.getItem(key) || "[]").map(String));
+      if (favorite) saved.add(String(countryId));
+      else saved.delete(String(countryId));
+      localStorage.setItem(key, JSON.stringify([...saved]));
+      return;
+    }
+    const session = await this.getSession();
+    if (favorite) {
+      const { error } = await db.from("user_country_favorites").upsert(
+        { user_id: session.user.id, country_id: countryId },
+        { onConflict: "user_id,country_id" }
+      );
+      if (error) throw error;
+      return;
+    }
+    const { error } = await db
+      .from("user_country_favorites")
+      .delete()
+      .eq("user_id", session.user.id)
+      .eq("country_id", countryId);
+    if (error) throw error;
+  },
+
   async setStickerStatus(stickerId, status) {
     const db = await client();
     if (!db) {

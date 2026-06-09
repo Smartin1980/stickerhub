@@ -1,7 +1,7 @@
 import { nextStatus, STATUS } from "./data.js";
-import { store } from "./store.js?v=20260610-1";
+import { store } from "./store.js?v=20260610-2";
 import { exportStickerListPdf, shareStickerListWhatsApp } from "./sticker-export.js?v=20260610-1";
-import { collectionStats, escapeHtml, initShell, toast } from "./ui.js?v=20260610-1";
+import { collectionStats, escapeHtml, initShell, toast } from "./ui.js?v=20260610-2";
 
 const countryGrid = document.querySelector("#country-grid");
 const stickerGrid = document.querySelector("#sticker-grid");
@@ -10,21 +10,28 @@ const statusFilter = document.querySelector("#status-filter");
 const code = new URLSearchParams(location.search).get("code")?.toUpperCase();
 let collection = { countries: [], stickers: [] };
 let profile = null;
+let favoriteCountryIds = new Set();
 
 function renderCountryCard(country) {
   const stickers = collection.stickers.filter((item) => item.country_id === country.id);
   const stats = collectionStats(stickers);
   return `
-    <a class="card country-card" href="country.html?code=${encodeURIComponent(country.code)}">
-      <span class="country-code">${escapeHtml(country.code)}</span>
-      <h3>${escapeHtml(country.name)}</h3>
-      <div class="country-counts">
-        <span><strong>${stats.owned}</strong> vorhanden</span>
-        <span><strong>${stats.missing}</strong> fehlen</span>
-      </div>
-      <div class="progress-meta"><span>Fertig</span><strong>${stats.completion}%</strong></div>
-      <div class="progress-track"><div class="progress-bar" style="width:${stats.completion}%"></div></div>
-    </a>`;
+    <article class="card country-card country-card-favorite">
+      <button class="favorite-button ${favoriteCountryIds.has(String(country.id)) ? "active" : ""}"
+        type="button" data-favorite-country-id="${country.id}"
+        aria-label="${favoriteCountryIds.has(String(country.id)) ? "Aus Favoriten entfernen" : "Zu Favoriten hinzufügen"}"
+        aria-pressed="${favoriteCountryIds.has(String(country.id))}">★</button>
+      <a href="country.html?code=${encodeURIComponent(country.code)}">
+        <span class="country-code">${escapeHtml(country.code)}</span>
+        <h3>${escapeHtml(country.name)}</h3>
+        <div class="country-counts">
+          <span><strong>${stats.owned}</strong> vorhanden</span>
+          <span><strong>${stats.missing}</strong> fehlen</span>
+        </div>
+        <div class="progress-meta"><span>Fertig</span><strong>${stats.completion}%</strong></div>
+        <div class="progress-track"><div class="progress-bar" style="width:${stats.completion}%"></div></div>
+      </a>
+    </article>`;
 }
 
 function renderSticker(sticker) {
@@ -100,6 +107,24 @@ stickerGrid.addEventListener("click", async (event) => {
 
 [searchInput, statusFilter].forEach((element) => element.addEventListener("input", render));
 
+countryGrid.addEventListener("click", async (event) => {
+  const button = event.target.closest("[data-favorite-country-id]");
+  if (!button) return;
+  const countryId = button.dataset.favoriteCountryId;
+  const favorite = !favoriteCountryIds.has(String(countryId));
+  button.disabled = true;
+  try {
+    await store.setCountryFavorite(countryId, favorite);
+    if (favorite) favoriteCountryIds.add(String(countryId));
+    else favoriteCountryIds.delete(String(countryId));
+    render();
+    toast(favorite ? "Land zu Favoriten hinzugefügt." : "Land aus Favoriten entfernt.");
+  } catch (error) {
+    toast(error.message, "error");
+    button.disabled = false;
+  }
+});
+
 document.querySelector("#export-pdf").addEventListener("click", () => {
   exportStickerListPdf(collection.stickers, profile, "missing", toast);
 });
@@ -120,7 +145,12 @@ async function loadCountries() {
   try {
     profile = await initShell("country");
     if (!profile) return;
-    collection = await store.getCollection();
+    const [loadedCollection, favorites] = await Promise.all([
+      store.getCollection(),
+      store.getCountryFavorites()
+    ]);
+    collection = loadedCollection;
+    favoriteCountryIds = new Set(favorites.map(String));
     render();
   } catch (error) {
     toast(error.message, "error");

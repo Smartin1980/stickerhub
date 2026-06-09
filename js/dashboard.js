@@ -1,6 +1,6 @@
-import { store } from "./store.js?v=20260610-1";
+import { store } from "./store.js?v=20260610-2";
 import { exportStickerListPdf, shareStickerListWhatsApp } from "./sticker-export.js?v=20260610-1";
-import { collectionStats, escapeHtml, initShell, toast } from "./ui.js?v=20260610-1";
+import { collectionStats, escapeHtml, initShell, toast } from "./ui.js?v=20260610-2";
 
 function countrySummary(country, stickers) {
   const items = stickers.filter((item) => item.country_id === country.id);
@@ -26,7 +26,10 @@ async function loadDashboard() {
   try {
     const profile = await initShell("dashboard");
     if (!profile) return;
-    const { countries, stickers } = await store.getCollection();
+    const [{ countries, stickers }, favoriteIds] = await Promise.all([
+      store.getCollection(),
+      store.getCountryFavorites()
+    ]);
     const stats = collectionStats(stickers);
     document.querySelector("#welcome").textContent = `Hallo, ${profile.display_name}`;
     ["total", "owned", "missing", "duplicate"].forEach((key) => {
@@ -37,10 +40,15 @@ async function loadDashboard() {
     document.querySelector("#progress-copy").textContent =
       `${stats.owned + stats.duplicate} von ${stats.total} Stickern gesammelt.`;
 
-    const summaries = countries
+    const favorites = new Set(favoriteIds.map(String));
+    document.querySelector("#country-preview-title").textContent =
+      favorites.size ? "Favorisierte Länder" : "Länderübersicht";
+    const selectedCountries = favorites.size
+      ? countries.filter((country) => favorites.has(String(country.id)))
+      : countries.slice(0, 4);
+    const summaries = selectedCountries
       .map((country) => countrySummary(country, stickers))
-      .sort((a, b) => b.completion - a.completion)
-      .slice(0, 4);
+      .sort((a, b) => b.completion - a.completion);
     document.querySelector("#country-preview").innerHTML = summaries.map(countryCard).join("");
 
     document.querySelector("#dashboard-missing-pdf").addEventListener("click", () =>
