@@ -1,6 +1,6 @@
-# StickerHub - FIFA 2026 Sticker Manager
+# StickerHub - Fussball WM 2026 Sticker Manager
 
-Responsive Web-Applikation zur Verwaltung einer FIFA-2026-Stickersammlung. Das
+Responsive Web-Applikation zur Verwaltung einer Stickersammlung zur Fussball WM 2026. Das
 Frontend verwendet HTML, CSS und Vanilla JavaScript. Authentifizierung und
 Datenhaltung laufen über Supabase.
 
