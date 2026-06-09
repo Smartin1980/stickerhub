@@ -128,20 +128,23 @@ export function exportStickerListPdf(stickers, profile, type, notify) {
   Object.values(groupStickers(selected)).forEach(({ country, numbers }) => {
     doc.setFont("helvetica", "bold");
     doc.setFontSize(9);
-    const codeLabel = `${country.code} `;
+    const codeLabel = `(${country.code})`;
     const codeWidth = doc.getTextWidth(codeLabel);
-    const countryLines = doc.splitTextToSize(country.name, 178 - codeWidth);
+    const countryLines = doc.splitTextToSize(country.name, 174 - codeWidth);
     const numberLines = doc.splitTextToSize(numbers.join(", "), 174);
     const blockHeight = countryLines.length * 4 + numberLines.length * 4 + 3;
     if (y + blockHeight > footerTop - 2) addPage();
 
-    doc.setTextColor(215, 173, 82);
-    doc.text(codeLabel, 16, y);
     doc.setTextColor(20, 34, 58);
-    doc.text(countryLines, 16 + codeWidth, y);
+    doc.text(countryLines, 16, y);
+    const lastCountryLine = countryLines[countryLines.length - 1];
+    const codeX = 16 + doc.getTextWidth(lastCountryLine) + 2;
+    doc.setTextColor(215, 173, 82);
+    doc.text(codeLabel, codeX, y + (countryLines.length - 1) * 4);
     y += countryLines.length * 4;
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8);
+    doc.setTextColor(20, 34, 58);
     doc.text(numberLines, 18, y);
     y += numberLines.length * 4 + 3;
   });
@@ -172,4 +175,3 @@ export function shareStickerListWhatsApp(stickers, profile, type, notify) {
   ].join("\n");
   window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank", "noopener,noreferrer");
 }
-

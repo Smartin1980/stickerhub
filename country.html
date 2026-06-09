@@ -15,10 +15,16 @@
           <div><p class="eyebrow">Album</p><h1 id="page-title">Länderübersicht</h1><p class="muted" id="page-copy">Wähle ein Land und verwalte deine Sticker.</p></div>
           <div class="page-actions">
             <div class="export-actions" data-feature="missing_list_export" hidden>
-              <button class="btn btn-secondary" id="export-pdf" type="button">Fehlliste als PDF</button>
-              <button class="btn whatsapp-btn" id="share-whatsapp" type="button">Fehlliste per WhatsApp</button>
-              <button class="btn btn-secondary" id="export-duplicates-pdf" type="button">Doppelte als PDF</button>
-              <button class="btn whatsapp-btn" id="share-duplicates-whatsapp" type="button">Doppelte per WhatsApp</button>
+              <div class="country-export-row">
+                <strong>Fehlliste</strong>
+                <button class="country-export-btn" id="export-pdf" type="button">PDF</button>
+                <button class="country-export-btn whatsapp" id="share-whatsapp" type="button">WhatsApp</button>
+              </div>
+              <div class="country-export-row">
+                <strong>Doppelte</strong>
+                <button class="country-export-btn" id="export-duplicates-pdf" type="button">PDF</button>
+                <button class="country-export-btn whatsapp" id="share-duplicates-whatsapp" type="button">WhatsApp</button>
+              </div>
             </div>
             <a class="btn btn-ghost" id="back-link" href="country.html" hidden>Alle Länder</a>
           </div>
@@ -41,6 +47,6 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-  <script type="module" src="js/country.js?v=20260610-9"></script>
+  <script type="module" src="js/country.js?v=20260610-10"></script>
 </body>
 </html>

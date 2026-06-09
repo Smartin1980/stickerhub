@@ -1,6 +1,6 @@
 import { nextStatus, STATUS } from "./data.js";
 import { store } from "./store.js?v=20260610-3";
-import { exportStickerListPdf, shareStickerListWhatsApp } from "./sticker-export.js?v=20260610-1";
+import { exportStickerListPdf, shareStickerListWhatsApp } from "./sticker-export.js?v=20260610-2";
 import { collectionStats, escapeHtml, initShell, toast } from "./ui.js?v=20260610-3";
 
 const countryGrid = document.querySelector("#country-grid");
