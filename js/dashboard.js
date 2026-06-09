@@ -1,5 +1,6 @@
-import { store } from "./store.js?v=20260608-6";
-import { collectionStats, escapeHtml, initShell, toast } from "./ui.js?v=20260608-6";
+import { store } from "./store.js?v=20260610-1";
+import { exportStickerListPdf, shareStickerListWhatsApp } from "./sticker-export.js?v=20260610-1";
+import { collectionStats, escapeHtml, initShell, toast } from "./ui.js?v=20260610-1";
 
 function countrySummary(country, stickers) {
   const items = stickers.filter((item) => item.country_id === country.id);
@@ -41,6 +42,19 @@ async function loadDashboard() {
       .sort((a, b) => b.completion - a.completion)
       .slice(0, 4);
     document.querySelector("#country-preview").innerHTML = summaries.map(countryCard).join("");
+
+    document.querySelector("#dashboard-missing-pdf").addEventListener("click", () =>
+      exportStickerListPdf(stickers, profile, "missing", toast)
+    );
+    document.querySelector("#dashboard-missing-whatsapp").addEventListener("click", () =>
+      shareStickerListWhatsApp(stickers, profile, "missing", toast)
+    );
+    document.querySelector("#dashboard-duplicates-pdf").addEventListener("click", () =>
+      exportStickerListPdf(stickers, profile, "duplicate", toast)
+    );
+    document.querySelector("#dashboard-duplicates-whatsapp").addEventListener("click", () =>
+      shareStickerListWhatsApp(stickers, profile, "duplicate", toast)
+    );
   } catch (error) {
     toast(error.message, "error");
   }

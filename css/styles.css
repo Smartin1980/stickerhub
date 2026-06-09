@@ -505,6 +505,12 @@ th { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spa
   gap: 10px;
 }
 .whatsapp-btn { color: var(--white); background: #168a4d; }
+.quick-export-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.quick-export-actions .btn { min-height: 42px; padding: 0 10px; font-size: 12px; }
 .compact-heading { align-items: flex-start; margin-bottom: 16px; }
 .catalog-admin-layout { grid-template-columns: 1fr; }
 .catalog-country-list {

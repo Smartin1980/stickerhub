@@ -34,6 +34,12 @@
             <div class="form-stack">
               <a class="btn" href="country.html">Sticker verwalten</a>
               <a class="btn btn-secondary" href="trades.html">Tauschbörse öffnen</a>
+              <div class="quick-export-actions" data-feature="missing_list_export" hidden>
+                <button class="btn btn-ghost" id="dashboard-missing-pdf" type="button">Fehlliste PDF</button>
+                <button class="btn whatsapp-btn" id="dashboard-missing-whatsapp" type="button">Fehlliste WhatsApp</button>
+                <button class="btn btn-ghost" id="dashboard-duplicates-pdf" type="button">Doppelte PDF</button>
+                <button class="btn whatsapp-btn" id="dashboard-duplicates-whatsapp" type="button">Doppelte WhatsApp</button>
+              </div>
             </div>
           </article>
         </section>
@@ -45,6 +51,8 @@
     </main>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script type="module" src="js/dashboard.js?v=20260608-6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script type="module" src="js/dashboard.js?v=20260610-1"></script>
 </body>
 </html>
