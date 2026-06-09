@@ -1,5 +1,5 @@
-import { store } from "./store.js?v=20260610-1";
-import { escapeHtml, initShell, setLoading, toast } from "./ui.js?v=20260610-1";
+import { store } from "./store.js?v=20260610-3";
+import { escapeHtml, initShell, setLoading, toast } from "./ui.js?v=20260610-3";
 
 const fileInput = document.querySelector("#csv-file");
 const preview = document.querySelector("#preview");
@@ -9,6 +9,7 @@ let catalogRows = [];
 let users = [];
 let catalog = { countries: [], stickers: [] };
 let selectedCountryId = null;
+let currentAdminId = null;
 
 function selectedCountry() {
   return catalog.countries.find((country) => String(country.id) === String(selectedCountryId));
@@ -210,6 +211,11 @@ function renderUsers() {
         <span class="muted">${escapeHtml(user.email)}</span>
       </td>
       <td>
+        <span class="collection-status ${user.has_stickers ? "has-data" : "empty-data"}">
+          ${user.has_stickers ? `${user.sticker_count} erfasst` : "Noch leer"}
+        </span>
+      </td>
+      <td>
         <select class="select compact-select role-select" aria-label="Rolle von ${escapeHtml(user.display_name)}">
           <option value="user" ${user.role === "user" ? "selected" : ""}>Benutzer</option>
           <option value="admin" ${user.role === "admin" ? "selected" : ""}>Administrator</option>
@@ -224,6 +230,11 @@ function renderUsers() {
         </label>
       </td>
       <td>${formatDate(user.created_at)}</td>
+      <td>
+        <button class="icon-btn danger delete-user" type="button"
+          aria-label="${escapeHtml(user.display_name)} löschen"
+          ${user.id === currentAdminId ? "disabled title=\"Eigenes Konto\"" : ""}>Löschen</button>
+      </td>
     </tr>
   `).join("");
   document.querySelector("#users-empty").hidden = filtered.length > 0;
@@ -252,6 +263,31 @@ async function saveUserRow(row) {
 document.querySelector("#admin-users").addEventListener("change", (event) => {
   const row = event.target.closest("[data-user-id]");
   if (row) saveUserRow(row);
+});
+
+document.querySelector("#admin-users").addEventListener("click", async (event) => {
+  const button = event.target.closest(".delete-user");
+  if (!button) return;
+  const row = button.closest("[data-user-id]");
+  const user = users.find((item) => item.id === row.dataset.userId);
+  const collectionNote = user.has_stickers
+    ? `${user.sticker_count} erfasste Sticker sowie alle Tauschangebote und Favoriten`
+    : "das Benutzerkonto";
+  if (!confirm(
+    `${user.display_name} (${user.email}) wirklich dauerhaft löschen?\n\n` +
+    `Dabei werden ${collectionNote} unwiderruflich entfernt.`
+  )) return;
+
+  button.disabled = true;
+  try {
+    await store.deleteAdminUser(user.id);
+    users = users.filter((item) => item.id !== user.id);
+    renderUsers();
+    toast("Benutzer wurde vollständig gelöscht.");
+  } catch (error) {
+    toast(error.message, "error");
+    button.disabled = false;
+  }
 });
 
 userSearch.addEventListener("input", renderUsers);
@@ -390,6 +426,7 @@ async function loadAdmin() {
       location.href = "../dashboard.html";
       return;
     }
+    currentAdminId = profile.id;
     const [userRows, flags] = await Promise.all([
       store.getAdminUsers(),
       store.getAdminFeatureFlags(),

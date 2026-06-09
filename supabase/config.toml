@@ -249,10 +249,17 @@ pass = "env(STICKERHUB_SMTP_PASSWORD)"
 admin_email = "support@stickerhub.bsone.ch"
 sender_name = "Martin von StickerHub"
 
-# Uncomment to customize email template
-# [auth.email.template.invite]
-# subject = "You have been invited"
-# content_path = "./supabase/templates/invite.html"
+[auth.email.template.confirmation]
+subject = "StickerHub: E-Mail-Adresse bestätigen"
+content_path = "./supabase/templates/confirmation.html"
+
+[auth.email.template.recovery]
+subject = "StickerHub: Passwort zurücksetzen"
+content_path = "./supabase/templates/recovery.html"
+
+[auth.email.template.magic_link]
+subject = "StickerHub: Dein persönlicher Login-Link"
+content_path = "./supabase/templates/magic-link.html"
 
 # Uncomment to customize notification email template
 # [auth.email.notification.password_changed]

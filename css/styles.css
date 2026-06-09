@@ -350,6 +350,7 @@ p { line-height: 1.55; }
   z-index: 30;
   backdrop-filter: blur(12px);
 }
+.mobile-nav.mobile-nav-admin { grid-template-columns: repeat(7, minmax(0, 1fr)); }
 .mobile-nav a { min-width: 0; overflow: hidden; padding: 9px 2px; color: #aab9cc; border-radius: 10px; text-align: center; text-overflow: ellipsis; font-size: 9px; font-weight: 700; }
 .mobile-nav a.active { color: var(--gold-light); background: rgba(255, 255, 255, 0.08); }
 .mobile-nav span { display: block; margin-bottom: 3px; font-size: 16px; }
@@ -611,6 +612,15 @@ th { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spa
   font-weight: 800;
 }
 .icon-btn.danger { color: var(--red); }
+.collection-status {
+  display: inline-flex;
+  padding: 5px 9px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+}
+.collection-status.has-data { color: #0b6b49; background: #e7f7f0; }
+.collection-status.empty-data { color: var(--muted); background: var(--surface); }
 .section-divider { margin: 28px 0; border: 0; border-top: 1px solid var(--border); }
 .catalog-import-section { margin-top: 20px; }
 .compact-select { min-width: 135px; min-height: 40px; padding: 7px 10px; }

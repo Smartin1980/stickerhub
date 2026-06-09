@@ -192,6 +192,13 @@ export const store = {
     if (error) throw error;
   },
 
+  async deleteAdminUser(userId) {
+    const db = await client();
+    if (!db) throw new Error("Die Benutzerverwaltung benötigt eine Supabase-Konfiguration.");
+    const { error } = await db.rpc("admin_delete_user", { target_user_id: userId });
+    if (error) throw error;
+  },
+
   async getAdminFeatureFlags() {
     const db = await client();
     if (!db) {

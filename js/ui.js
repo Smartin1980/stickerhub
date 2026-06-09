@@ -1,4 +1,4 @@
-import { store } from "./store.js?v=20260610-2";
+import { store } from "./store.js?v=20260610-3";
 
 const pageNames = {
   dashboard: "Dashboard",
@@ -98,10 +98,15 @@ export async function initShell(activePage) {
       </nav>
     </aside>`;
   const mobile = `
-    <nav class="mobile-nav" aria-label="Mobile Navigation">
+    <nav class="mobile-nav ${profile.role === "admin" ? "mobile-nav-admin" : ""}"
+      aria-label="Mobile Navigation">
       ${links.map(([id, href, label, icon]) =>
         `<a class="${activePage === id ? "active" : ""}" href="${href}"><span>${icon}</span>${label}</a>`
       ).join("")}
+      ${profile.role === "admin"
+        ? `<a class="${activePage === "admin" ? "active" : ""}" href="${root}pages/admin.html">
+            <span>A</span>Admin</a>`
+        : ""}
     </nav>`;
   const topbar = `
     <header class="topbar">
