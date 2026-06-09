@@ -157,18 +157,20 @@ document.querySelector("#export-pdf").addEventListener("click", () => {
   y += 12;
 
   Object.values(groupedMissingStickers()).forEach(({ country, numbers }) => {
-    const numberLines = doc.splitTextToSize(numbers.join(", "), 150);
-    const blockHeight = 7 + numberLines.length * 6;
+    const countryLines = doc.splitTextToSize(`${country.name} (${country.code})`, 178);
+    const numberLines = doc.splitTextToSize(numbers.join(", "), 172);
+    const blockHeight = countryLines.length * 6 + numberLines.length * 6 + 5;
     if (y + blockHeight > pageHeight - 16) {
       doc.addPage();
       y = 20;
     }
     doc.setFont("helvetica", "bold");
     doc.setFontSize(11);
-    doc.text(`${country.name} (${country.code})`, 16, y);
+    doc.text(countryLines, 16, y);
+    y += countryLines.length * 6;
     doc.setFont("helvetica", "normal");
-    doc.text(numberLines, 50, y);
-    y += blockHeight;
+    doc.text(numberLines, 20, y);
+    y += numberLines.length * 6 + 5;
   });
 
   const filename = `stickerhub-fehlliste-${new Date().toISOString().slice(0, 10)}.pdf`;
