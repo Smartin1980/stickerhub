@@ -146,7 +146,35 @@ document.querySelector("#export-pdf").addEventListener("click", () => {
   }
   const doc = new window.jspdf.jsPDF();
   const pageHeight = doc.internal.pageSize.getHeight();
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const footerTop = pageHeight - 18;
   let y = 22;
+
+  function addFooter() {
+    doc.setDrawColor(215, 173, 82);
+    doc.line(16, footerTop, pageWidth - 16, footerTop);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(9);
+    doc.setTextColor(10, 29, 56);
+    doc.text("StickerHub", 16, footerTop + 6);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8);
+    doc.setTextColor(104, 116, 138);
+    doc.text(
+      "Deine FIFA 2026 Stickersammlung online verwalten und tauschen",
+      38,
+      footerTop + 6
+    );
+    doc.text("stickerhub.bsone.ch", pageWidth - 16, footerTop + 6, { align: "right" });
+    doc.setTextColor(20, 34, 58);
+  }
+
+  function addPage() {
+    addFooter();
+    doc.addPage();
+    y = 20;
+  }
+
   doc.setFont("helvetica", "bold");
   doc.setFontSize(18);
   doc.text("StickerHub Fehlliste", 16, y);
@@ -157,22 +185,28 @@ document.querySelector("#export-pdf").addEventListener("click", () => {
   y += 12;
 
   Object.values(groupedMissingStickers()).forEach(({ country, numbers }) => {
-    const countryLines = doc.splitTextToSize(`${country.name} (${country.code})`, 178);
-    const numberLines = doc.splitTextToSize(numbers.join(", "), 172);
-    const blockHeight = countryLines.length * 6 + numberLines.length * 6 + 5;
-    if (y + blockHeight > pageHeight - 16) {
-      doc.addPage();
-      y = 20;
+    const countryLines = doc.splitTextToSize(country.name, 174);
+    const numberLines = doc.splitTextToSize(numbers.join(", "), 170);
+    const blockHeight = countryLines.length * 6 + 6 + numberLines.length * 6 + 7;
+    if (y + blockHeight > footerTop - 4) {
+      addPage();
     }
     doc.setFont("helvetica", "bold");
     doc.setFontSize(11);
     doc.text(countryLines, 16, y);
     y += countryLines.length * 6;
+    doc.setFontSize(9);
+    doc.setTextColor(215, 173, 82);
+    doc.text(`(${country.code})`, 16, y);
+    y += 6;
     doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    doc.setTextColor(20, 34, 58);
     doc.text(numberLines, 20, y);
-    y += numberLines.length * 6 + 5;
+    y += numberLines.length * 6 + 7;
   });
 
+  addFooter();
   const filename = `stickerhub-fehlliste-${new Date().toISOString().slice(0, 10)}.pdf`;
   doc.save(filename);
 });
