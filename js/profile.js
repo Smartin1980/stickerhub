@@ -1,5 +1,5 @@
-import { store } from "./store.js?v=20260610-3";
-import { collectionStats, initials, initShell, setLoading, toast } from "./ui.js?v=20260610-3";
+import { store } from "./store.js?v=20260610-4";
+import { collectionStats, initials, initShell, setLoading, toast } from "./ui.js?v=20260610-4";
 
 const form = document.querySelector("#profile-form");
 const logoutButton = document.querySelector("#logout");
@@ -30,7 +30,8 @@ form.addEventListener("submit", async (event) => {
   try {
     profile = await store.updateProfile({
       display_name: document.querySelector("#display-name").value.trim(),
-      avatar_url: document.querySelector("#avatar-url").value.trim() || null
+      avatar_url: document.querySelector("#avatar-url").value.trim() || null,
+      pdf_number_font_size: Number(document.querySelector("#pdf-number-font-size").value)
     });
     document.querySelector("#profile-name").textContent = profile.display_name;
     setAvatar();
@@ -83,6 +84,8 @@ async function loadProfile() {
     document.querySelector("#profile-email").textContent = profile.email;
     document.querySelector("#display-name").value = profile.display_name;
     document.querySelector("#avatar-url").value = profile.avatar_url || "";
+    document.querySelector("#pdf-number-font-size").value =
+      String(profile.pdf_number_font_size || 9);
     document.querySelector("#completion").textContent = `${stats.completion}%`;
     document.querySelector("#progress").style.width = `${stats.completion}%`;
     document.querySelector("#missing").textContent = stats.missing;

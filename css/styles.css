@@ -249,6 +249,7 @@ p { line-height: 1.55; }
 
 .field { display: grid; gap: 7px; }
 .field label { font-size: 14px; font-weight: 700; }
+.field-help { color: var(--muted); font-size: 12px; line-height: 1.45; }
 .field-label-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .text-button {
   padding: 0;

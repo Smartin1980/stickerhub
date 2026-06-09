@@ -21,6 +21,16 @@
             <form class="form-stack" id="profile-form" style="margin-top:28px">
               <div class="field"><label for="display-name">Benutzername</label><input class="input" id="display-name" required></div>
               <div class="field"><label for="avatar-url">Avatar URL</label><input class="input" id="avatar-url" type="url" placeholder="https://..."></div>
+              <div class="field">
+                <label for="pdf-number-font-size">PDF Schriftgrösse der Stickernummern</label>
+                <select class="select" id="pdf-number-font-size">
+                  <option value="8">8 pt · Kompakt</option>
+                  <option value="9">9 pt · Standard</option>
+                  <option value="10">10 pt · Gut lesbar</option>
+                  <option value="11">11 pt · Gross</option>
+                </select>
+                <span class="field-help">9 pt bietet die beste Balance zwischen Lesbarkeit und Seitenzahl.</span>
+              </div>
               <button class="btn" type="submit">Profil speichern</button>
               <button class="btn btn-danger" id="logout" type="button">Ausloggen</button>
             </form>
@@ -67,6 +77,6 @@
     </form>
   </dialog>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script type="module" src="js/profile.js?v=20260610-1"></script>
+  <script type="module" src="js/profile.js?v=20260610-2"></script>
 </body>
 </html>

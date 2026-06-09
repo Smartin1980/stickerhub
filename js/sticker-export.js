@@ -77,6 +77,8 @@ export function exportStickerListPdf(stickers, profile, type, notify) {
   const pageWidth = doc.internal.pageSize.getWidth();
   const footerTop = pageHeight - 24;
   const qrCodeImage = createQrCodeImage();
+  const numberFontSize = Math.min(11, Math.max(8, Number(profile?.pdf_number_font_size) || 9));
+  const numberLineHeight = numberFontSize * 0.5;
   let y = 15;
 
   function addFooter() {
@@ -131,10 +133,14 @@ export function exportStickerListPdf(stickers, profile, type, notify) {
     const codeLabel = `(${country.code})`;
     const codeWidth = doc.getTextWidth(codeLabel);
     const countryLines = doc.splitTextToSize(country.name, 174 - codeWidth);
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(numberFontSize);
     const numberLines = doc.splitTextToSize(numbers.join(", "), 174);
-    const blockHeight = countryLines.length * 4 + numberLines.length * 4 + 3;
+    const blockHeight = countryLines.length * 4 + numberLines.length * numberLineHeight + 3;
     if (y + blockHeight > footerTop - 2) addPage();
 
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(9);
     doc.setTextColor(20, 34, 58);
     doc.text(countryLines, 16, y);
     const lastCountryLine = countryLines[countryLines.length - 1];
@@ -143,10 +149,10 @@ export function exportStickerListPdf(stickers, profile, type, notify) {
     doc.text(codeLabel, codeX, y + (countryLines.length - 1) * 4);
     y += countryLines.length * 4;
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(8);
+    doc.setFontSize(numberFontSize);
     doc.setTextColor(20, 34, 58);
     doc.text(numberLines, 18, y);
-    y += numberLines.length * 4 + 3;
+    y += numberLines.length * numberLineHeight + 3;
   });
 
   addFooter();
