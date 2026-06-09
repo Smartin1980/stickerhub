@@ -148,9 +148,9 @@ document.querySelector("#export-pdf").addEventListener("click", () => {
   const doc = new window.jspdf.jsPDF();
   const pageHeight = doc.internal.pageSize.getHeight();
   const pageWidth = doc.internal.pageSize.getWidth();
-  const footerTop = pageHeight - 30;
+  const footerTop = pageHeight - 24;
   let qrCodeImage = null;
-  let y = 22;
+  let y = 15;
 
   if (window.QRCode) {
     const qrContainer = document.createElement("div");
@@ -169,23 +169,23 @@ document.querySelector("#export-pdf").addEventListener("click", () => {
     doc.setDrawColor(215, 173, 82);
     doc.line(16, footerTop, pageWidth - 16, footerTop);
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(10);
+    doc.setFontSize(9);
     doc.setTextColor(10, 29, 56);
-    doc.text("StickerHub", 16, footerTop + 7);
+    doc.text("StickerHub", 16, footerTop + 6);
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(8);
+    doc.setFontSize(7);
     doc.setTextColor(104, 116, 138);
     doc.text(
-      "Deine Fussball-WM-Stickersammlung online verwalten und tauschen",
+      "Fussball-WM-Sticker online verwalten und tauschen",
       16,
-      footerTop + 13
+      footerTop + 11
     );
     doc.setTextColor(23, 64, 111);
-    doc.textWithLink("stickerhub.bsone.ch", 16, footerTop + 20, { url: websiteUrl });
+    doc.textWithLink("stickerhub.bsone.ch", 16, footerTop + 16, { url: websiteUrl });
     if (qrCodeImage) {
-      const qrSize = 22;
+      const qrSize = 17;
       const qrX = pageWidth - 16 - qrSize;
-      const qrY = footerTop + 3;
+      const qrY = footerTop + 2;
       doc.addImage(qrCodeImage, "PNG", qrX, qrY, qrSize, qrSize);
       doc.link(qrX, qrY, qrSize, qrSize, { url: websiteUrl });
     }
@@ -195,38 +195,35 @@ document.querySelector("#export-pdf").addEventListener("click", () => {
   function addPage() {
     addFooter();
     doc.addPage();
-    y = 20;
+    y = 14;
   }
 
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(18);
+  doc.setFontSize(15);
   doc.text("StickerHub Fehlliste", 16, y);
-  y += 9;
+  y += 6;
   doc.setFont("helvetica", "normal");
-  doc.setFontSize(10);
+  doc.setFontSize(8);
   doc.text(`${profile?.display_name || "Sammler"} · ${missing.length} fehlende Sticker`, 16, y);
-  y += 12;
+  y += 7;
 
   Object.values(groupedMissingStickers()).forEach(({ country, numbers }) => {
-    const countryLines = doc.splitTextToSize(country.name, 174);
-    const numberLines = doc.splitTextToSize(numbers.join(", "), 170);
-    const blockHeight = countryLines.length * 6 + 6 + numberLines.length * 6 + 7;
-    if (y + blockHeight > footerTop - 4) {
+    const countryLabel = `${country.name} (${country.code})`;
+    const countryLines = doc.splitTextToSize(countryLabel, 178);
+    const numberLines = doc.splitTextToSize(numbers.join(", "), 174);
+    const blockHeight = countryLines.length * 4 + numberLines.length * 4 + 3;
+    if (y + blockHeight > footerTop - 2) {
       addPage();
     }
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(11);
-    doc.text(countryLines, 16, y);
-    y += countryLines.length * 6;
     doc.setFontSize(9);
-    doc.setTextColor(215, 173, 82);
-    doc.text(`(${country.code})`, 16, y);
-    y += 6;
+    doc.text(countryLines, 16, y);
+    y += countryLines.length * 4;
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(10);
+    doc.setFontSize(8);
     doc.setTextColor(20, 34, 58);
-    doc.text(numberLines, 20, y);
-    y += numberLines.length * 6 + 7;
+    doc.text(numberLines, 18, y);
+    y += numberLines.length * 4 + 3;
   });
 
   addFooter();
