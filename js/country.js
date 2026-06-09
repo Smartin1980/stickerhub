@@ -1,6 +1,6 @@
 import { nextStatus, STATUS } from "./data.js";
-import { store } from "./store.js?v=20260608-6";
-import { collectionStats, escapeHtml, initShell, toast } from "./ui.js?v=20260608-6";
+import { store } from "./store.js?v=20260610-1";
+import { collectionStats, escapeHtml, initShell, toast } from "./ui.js?v=20260610-1";
 
 const countryGrid = document.querySelector("#country-grid");
 const stickerGrid = document.querySelector("#sticker-grid");
@@ -8,6 +8,7 @@ const searchInput = document.querySelector("#search");
 const statusFilter = document.querySelector("#status-filter");
 const code = new URLSearchParams(location.search).get("code")?.toUpperCase();
 let collection = { countries: [], stickers: [] };
+let profile = null;
 
 function renderCountryCard(country) {
   const stickers = collection.stickers.filter((item) => item.country_id === country.id);
@@ -98,9 +99,95 @@ stickerGrid.addEventListener("click", async (event) => {
 
 [searchInput, statusFilter].forEach((element) => element.addEventListener("input", render));
 
+function missingStickers() {
+  return collection.stickers
+    .filter((sticker) => sticker.status === "missing")
+    .sort((a, b) =>
+      a.countries.name.localeCompare(b.countries.name, "de") ||
+      a.sticker_number - b.sticker_number
+    );
+}
+
+function groupedMissingStickers() {
+  return missingStickers().reduce((groups, sticker) => {
+    const key = sticker.countries.code;
+    if (!groups[key]) {
+      groups[key] = { country: sticker.countries, numbers: [] };
+    }
+    groups[key].numbers.push(sticker.sticker_number);
+    return groups;
+  }, {});
+}
+
+function missingListText() {
+  const groups = Object.values(groupedMissingStickers());
+  const lines = groups.map(({ country, numbers }) =>
+    `${country.name} (${country.code}): ${numbers.join(", ")}`
+  );
+  return [
+    `StickerHub Fehlliste von ${profile?.display_name || "Sammler"}`,
+    `${missingStickers().length} fehlende Sticker`,
+    "",
+    ...lines,
+    "",
+    "Erstellt mit StickerHub"
+  ].join("\n");
+}
+
+document.querySelector("#export-pdf").addEventListener("click", () => {
+  const missing = missingStickers();
+  if (!missing.length) {
+    toast("Glückwunsch, deine Fehlliste ist leer.");
+    return;
+  }
+  if (!window.jspdf?.jsPDF) {
+    toast("Der PDF-Export konnte nicht geladen werden.", "error");
+    return;
+  }
+  const doc = new window.jspdf.jsPDF();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  let y = 22;
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(18);
+  doc.text("StickerHub Fehlliste", 16, y);
+  y += 9;
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
+  doc.text(`${profile?.display_name || "Sammler"} · ${missing.length} fehlende Sticker`, 16, y);
+  y += 12;
+
+  Object.values(groupedMissingStickers()).forEach(({ country, numbers }) => {
+    const numberLines = doc.splitTextToSize(numbers.join(", "), 150);
+    const blockHeight = 7 + numberLines.length * 6;
+    if (y + blockHeight > pageHeight - 16) {
+      doc.addPage();
+      y = 20;
+    }
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
+    doc.text(`${country.name} (${country.code})`, 16, y);
+    doc.setFont("helvetica", "normal");
+    doc.text(numberLines, 50, y);
+    y += blockHeight;
+  });
+
+  const filename = `stickerhub-fehlliste-${new Date().toISOString().slice(0, 10)}.pdf`;
+  doc.save(filename);
+});
+
+document.querySelector("#share-whatsapp").addEventListener("click", () => {
+  if (!missingStickers().length) {
+    toast("Glückwunsch, deine Fehlliste ist leer.");
+    return;
+  }
+  const url = `https://wa.me/?text=${encodeURIComponent(missingListText())}`;
+  window.open(url, "_blank", "noopener,noreferrer");
+});
+
 async function loadCountries() {
   try {
-    await initShell("country");
+    profile = await initShell("country");
+    if (!profile) return;
     collection = await store.getCollection();
     render();
   } catch (error) {

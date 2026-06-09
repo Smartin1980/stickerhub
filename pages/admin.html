@@ -15,7 +15,7 @@
           <div>
             <p class="eyebrow">Verwaltung</p>
             <h1>Administration</h1>
-            <p class="muted">Benutzer, Testgruppen und Feature-Rollouts zentral verwalten.</p>
+            <p class="muted">Benutzer, Features, Länder und Sticker zentral verwalten.</p>
           </div>
         </header>
 
@@ -53,7 +53,65 @@
         </section>
 
         <section id="catalog-panel" hidden>
-          <div class="grid two-column">
+          <div class="grid two-column catalog-admin-layout">
+            <article class="card">
+              <div class="page-heading compact-heading">
+                <div>
+                  <h2>Länder</h2>
+                  <p class="muted">Name und Kürzel erfassen oder bearbeiten.</p>
+                </div>
+                <button class="btn" id="new-country" type="button">Neues Land</button>
+              </div>
+              <input class="input" id="catalog-search" type="search"
+                placeholder="Land oder Kürzel suchen">
+              <div class="catalog-country-list" id="catalog-countries"></div>
+              <div class="empty" id="catalog-countries-empty" hidden>Keine Länder gefunden.</div>
+            </article>
+
+            <article class="card">
+              <div id="catalog-editor-empty" class="empty">
+                Wähle ein Land aus oder erfasse ein neues.
+              </div>
+              <div id="catalog-editor" hidden>
+                <form class="form-stack" id="country-form">
+                  <input id="country-id" type="hidden">
+                  <div class="grid catalog-country-fields">
+                    <div class="field">
+                      <label for="country-code">Kürzel</label>
+                      <input class="input" id="country-code" maxlength="4"
+                        pattern="[A-Za-z]{3,4}" placeholder="SUI" required>
+                    </div>
+                    <div class="field">
+                      <label for="country-name">Ländername</label>
+                      <input class="input" id="country-name" placeholder="Schweiz" required>
+                    </div>
+                  </div>
+                  <div class="catalog-actions">
+                    <button class="btn" type="submit">Land speichern</button>
+                    <button class="btn btn-danger" id="delete-country" type="button">Land löschen</button>
+                  </div>
+                </form>
+
+                <hr class="section-divider">
+
+                <div class="page-heading compact-heading">
+                  <div>
+                    <h2>Sticker</h2>
+                    <p class="muted" id="sticker-country-copy"></p>
+                  </div>
+                  <form class="catalog-add-sticker" id="sticker-form">
+                    <input class="input" id="new-sticker-number" type="number" min="1"
+                      placeholder="Nr." aria-label="Neue Stickernummer" required>
+                    <button class="btn" type="submit">Hinzufügen</button>
+                  </form>
+                </div>
+                <div class="catalog-sticker-list" id="catalog-stickers"></div>
+                <div class="empty" id="catalog-stickers-empty" hidden>Noch keine Sticker erfasst.</div>
+              </div>
+            </article>
+          </div>
+
+          <div class="grid two-column catalog-import-section">
             <article class="card">
               <h2>Stickerkatalog importieren</h2>
               <form class="form-stack" id="import-form">
@@ -81,6 +139,6 @@
     </main>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script type="module" src="../js/admin.js?v=20260608-6"></script>
+  <script type="module" src="../js/admin.js?v=20260610-1"></script>
 </body>
 </html>

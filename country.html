@@ -13,7 +13,13 @@
       <div class="content">
         <header class="page-heading">
           <div><p class="eyebrow">Album</p><h1 id="page-title">Länderübersicht</h1><p class="muted" id="page-copy">Wähle ein Land und verwalte deine Sticker.</p></div>
-          <a class="btn btn-ghost" id="back-link" href="country.html" hidden>Alle Länder</a>
+          <div class="page-actions">
+            <div class="export-actions" data-feature="missing_list_export" hidden>
+              <button class="btn btn-secondary" id="export-pdf" type="button">Fehlliste als PDF</button>
+              <button class="btn whatsapp-btn" id="share-whatsapp" type="button">Per WhatsApp</button>
+            </div>
+            <a class="btn btn-ghost" id="back-link" href="country.html" hidden>Alle Länder</a>
+          </div>
         </header>
         <div class="toolbar">
           <div class="field"><label for="search">Sticker suchen</label><input class="input" id="search" type="search" placeholder="Land, Kürzel oder Nummer"></div>
@@ -31,6 +37,7 @@
     </main>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script type="module" src="js/country.js?v=20260608-6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.2/dist/jspdf.umd.min.js"></script>
+  <script type="module" src="js/country.js?v=20260610-1"></script>
 </body>
 </html>

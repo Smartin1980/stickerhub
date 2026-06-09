@@ -1,5 +1,5 @@
-import { store } from "./store.js?v=20260608-6";
-import { escapeHtml, initShell, setLoading, toast } from "./ui.js?v=20260608-6";
+import { store } from "./store.js?v=20260610-1";
+import { escapeHtml, initShell, setLoading, toast } from "./ui.js?v=20260610-1";
 
 const fileInput = document.querySelector("#csv-file");
 const preview = document.querySelector("#preview");
@@ -7,6 +7,188 @@ const importForm = document.querySelector("#import-form");
 const userSearch = document.querySelector("#user-search");
 let catalogRows = [];
 let users = [];
+let catalog = { countries: [], stickers: [] };
+let selectedCountryId = null;
+
+function selectedCountry() {
+  return catalog.countries.find((country) => String(country.id) === String(selectedCountryId));
+}
+
+function stickersForCountry(countryId) {
+  return catalog.stickers
+    .filter((sticker) => String(sticker.country_id) === String(countryId))
+    .sort((a, b) => a.sticker_number - b.sticker_number);
+}
+
+function renderCatalogCountries() {
+  const term = document.querySelector("#catalog-search").value.trim().toLowerCase();
+  const countries = catalog.countries.filter((country) =>
+    `${country.code} ${country.name}`.toLowerCase().includes(term)
+  );
+  document.querySelector("#catalog-countries").innerHTML = countries.map((country) => `
+    <button class="catalog-country-item ${String(country.id) === String(selectedCountryId) ? "active" : ""}"
+      type="button" data-country-id="${country.id}">
+      <span><strong>${escapeHtml(country.code)}</strong> · ${escapeHtml(country.name)}</span>
+      <span>${stickersForCountry(country.id).length} Sticker</span>
+    </button>
+  `).join("");
+  document.querySelector("#catalog-countries-empty").hidden = countries.length > 0;
+}
+
+function renderCatalogEditor() {
+  const country = selectedCountry();
+  const editor = document.querySelector("#catalog-editor");
+  document.querySelector("#catalog-editor-empty").hidden = Boolean(country);
+  editor.hidden = !country;
+  if (!country) return;
+
+  document.querySelector("#country-id").value = country.id;
+  document.querySelector("#country-code").value = country.code;
+  document.querySelector("#country-name").value = country.name;
+  document.querySelector("#delete-country").hidden = false;
+  document.querySelector("#sticker-form").hidden = false;
+  document.querySelector("#sticker-country-copy").textContent =
+    `${country.name} (${country.code}) · ${stickersForCountry(country.id).length} Sticker`;
+
+  const stickers = stickersForCountry(country.id);
+  document.querySelector("#catalog-stickers").innerHTML = stickers.map((sticker) => `
+    <div class="catalog-sticker-item" data-sticker-id="${sticker.id}">
+      <input class="input sticker-number-input" type="number" min="1"
+        value="${sticker.sticker_number}" aria-label="Stickernummer ${sticker.sticker_number}">
+      <div class="catalog-sticker-actions">
+        <button class="icon-btn save-sticker" type="button" title="Speichern">OK</button>
+        <button class="icon-btn danger delete-sticker" type="button" title="Löschen">×</button>
+      </div>
+    </div>
+  `).join("");
+  document.querySelector("#catalog-stickers-empty").hidden = stickers.length > 0;
+}
+
+function renderCatalog() {
+  renderCatalogCountries();
+  renderCatalogEditor();
+}
+
+async function loadCatalog(preferredCountryId = selectedCountryId) {
+  catalog = await store.getAdminCatalog();
+  selectedCountryId = catalog.countries.some((country) =>
+    String(country.id) === String(preferredCountryId)
+  ) ? preferredCountryId : catalog.countries[0]?.id ?? null;
+  renderCatalog();
+}
+
+document.querySelector("#catalog-search").addEventListener("input", renderCatalogCountries);
+
+document.querySelector("#catalog-countries").addEventListener("click", (event) => {
+  const button = event.target.closest("[data-country-id]");
+  if (!button) return;
+  selectedCountryId = button.dataset.countryId;
+  renderCatalog();
+});
+
+document.querySelector("#new-country").addEventListener("click", () => {
+  selectedCountryId = null;
+  document.querySelector("#catalog-editor-empty").hidden = true;
+  document.querySelector("#catalog-editor").hidden = false;
+  document.querySelector("#country-form").reset();
+  document.querySelector("#country-id").value = "";
+  document.querySelector("#delete-country").hidden = true;
+  document.querySelector("#sticker-country-copy").textContent =
+    "Speichere zuerst das neue Land.";
+  document.querySelector("#sticker-form").hidden = true;
+  document.querySelector("#catalog-stickers").innerHTML = "";
+  document.querySelector("#catalog-stickers-empty").hidden = true;
+  renderCatalogCountries();
+  document.querySelector("#country-code").focus();
+});
+
+document.querySelector("#country-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const countryId = document.querySelector("#country-id").value;
+  const code = document.querySelector("#country-code").value.trim().toUpperCase();
+  const name = document.querySelector("#country-name").value.trim();
+  if (!/^[A-Z]{3,4}$/.test(code)) {
+    toast("Das Kürzel muss aus drei oder vier Buchstaben bestehen.", "error");
+    return;
+  }
+  const button = event.currentTarget.querySelector("[type=submit]");
+  setLoading(button, true, "Speichert...");
+  try {
+    const country = countryId
+      ? await store.updateCountry(countryId, code, name)
+      : await store.createCountry(code, name);
+    selectedCountryId = country.id;
+    await loadCatalog(country.id);
+    document.querySelector("#delete-country").hidden = false;
+    document.querySelector("#sticker-form").hidden = false;
+    toast(countryId ? "Land aktualisiert." : "Land erstellt.");
+  } catch (error) {
+    toast(error.message, "error");
+  } finally {
+    setLoading(button, false);
+  }
+});
+
+document.querySelector("#delete-country").addEventListener("click", async () => {
+  const country = selectedCountry();
+  if (!country) return;
+  const stickerCount = stickersForCountry(country.id).length;
+  if (!confirm(
+    `${country.name} und ${stickerCount} zugehörige Sticker wirklich löschen? ` +
+    "Damit werden auch Benutzerstatus und Tauschangebote dieser Sticker entfernt."
+  )) return;
+  try {
+    await store.deleteCountry(country.id);
+    selectedCountryId = null;
+    await loadCatalog();
+    toast("Land und zugehörige Sticker gelöscht.");
+  } catch (error) {
+    toast(error.message, "error");
+  }
+});
+
+document.querySelector("#sticker-form").addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const country = selectedCountry();
+  if (!country) return;
+  const input = document.querySelector("#new-sticker-number");
+  const stickerNumber = Number(input.value);
+  const button = event.currentTarget.querySelector("button");
+  setLoading(button, true, "...");
+  try {
+    await store.createSticker(country.id, stickerNumber);
+    input.value = "";
+    await loadCatalog(country.id);
+    toast(`${country.code}-${stickerNumber} erstellt.`);
+  } catch (error) {
+    toast(error.message, "error");
+  } finally {
+    setLoading(button, false);
+  }
+});
+
+document.querySelector("#catalog-stickers").addEventListener("click", async (event) => {
+  const row = event.target.closest("[data-sticker-id]");
+  if (!row) return;
+  const stickerId = row.dataset.stickerId;
+  const stickerNumber = Number(row.querySelector(".sticker-number-input").value);
+  const country = selectedCountry();
+  try {
+    if (event.target.closest(".save-sticker")) {
+      await store.updateSticker(stickerId, stickerNumber);
+      await loadCatalog(country.id);
+      toast("Stickernummer aktualisiert.");
+    }
+    if (event.target.closest(".delete-sticker")) {
+      if (!confirm(`${country.code}-${stickerNumber} wirklich löschen?`)) return;
+      await store.deleteSticker(stickerId);
+      await loadCatalog(country.id);
+      toast("Sticker gelöscht.");
+    }
+  } catch (error) {
+    toast(error.message, "error");
+  }
+});
 
 function formatDate(value) {
   return new Intl.DateTimeFormat("de-CH", {
@@ -186,6 +368,7 @@ importForm.addEventListener("submit", async (event) => {
   setLoading(button, true, "Import läuft...");
   try {
     const imported = await store.importRows(catalogRows);
+    await loadCatalog(selectedCountryId);
     toast(`${imported} Datensätze wurden verarbeitet.`);
     importForm.reset();
     catalogRows = [];
@@ -209,7 +392,8 @@ async function loadAdmin() {
     }
     const [userRows, flags] = await Promise.all([
       store.getAdminUsers(),
-      store.getAdminFeatureFlags()
+      store.getAdminFeatureFlags(),
+      loadCatalog()
     ]);
     users = userRows;
     renderUsers();

@@ -162,7 +162,7 @@ export const store = {
 
   async getFeatureFlags() {
     const db = await client();
-    if (!db) return { collection_import: true };
+    if (!db) return { collection_import: true, missing_list_export: true };
     const { data, error } = await db.rpc("get_my_feature_flags");
     if (error) throw error;
     return Object.fromEntries(data.map((flag) => [flag.key, flag.enabled]));
@@ -195,13 +195,22 @@ export const store = {
   async getAdminFeatureFlags() {
     const db = await client();
     if (!db) {
-      return [{
-        key: "collection_import",
-        name: "Sammlungsimport",
-        description: "CSV-Import und mobile Fotoerkennung.",
-        enabled_friends_family: true,
-        enabled_public: true
-      }];
+      return [
+        {
+          key: "collection_import",
+          name: "Sammlungsimport",
+          description: "CSV-Import und mobile Fotoerkennung.",
+          enabled_friends_family: true,
+          enabled_public: true
+        },
+        {
+          key: "missing_list_export",
+          name: "Fehllisten-Export",
+          description: "Fehlende Sticker als PDF exportieren oder über WhatsApp teilen.",
+          enabled_friends_family: true,
+          enabled_public: false
+        }
+      ];
     }
     const { data, error } = await db.rpc("admin_list_feature_flags");
     if (error) throw error;
@@ -216,6 +225,86 @@ export const store = {
       friends_family_enabled: friendsFamilyEnabled,
       public_enabled: publicEnabled
     });
+    if (error) throw error;
+  },
+
+  async getAdminCatalog() {
+    const db = await client();
+    if (!db) {
+      const state = readDemo();
+      return { countries: state.countries, stickers: state.stickers };
+    }
+    const [{ data: countries, error: countriesError }, { data: stickers, error: stickersError }] =
+      await Promise.all([
+        db.from("countries").select("*").order("name"),
+        db.from("stickers").select("*").order("sticker_number")
+      ]);
+    if (countriesError) throw countriesError;
+    if (stickersError) throw stickersError;
+    return { countries, stickers };
+  },
+
+  async createCountry(code, name) {
+    const db = await client();
+    if (!db) throw new Error("Die Katalogpflege benötigt eine Supabase-Konfiguration.");
+    const { data, error } = await db
+      .from("countries")
+      .insert({ code: code.toUpperCase(), name })
+      .select()
+      .single();
+    if (error) throw error;
+    return data;
+  },
+
+  async updateCountry(countryId, code, name) {
+    const db = await client();
+    if (!db) throw new Error("Die Katalogpflege benötigt eine Supabase-Konfiguration.");
+    const { data, error } = await db
+      .from("countries")
+      .update({ code: code.toUpperCase(), name })
+      .eq("id", countryId)
+      .select()
+      .single();
+    if (error) throw error;
+    return data;
+  },
+
+  async deleteCountry(countryId) {
+    const db = await client();
+    if (!db) throw new Error("Die Katalogpflege benötigt eine Supabase-Konfiguration.");
+    const { error } = await db.from("countries").delete().eq("id", countryId);
+    if (error) throw error;
+  },
+
+  async createSticker(countryId, stickerNumber) {
+    const db = await client();
+    if (!db) throw new Error("Die Katalogpflege benötigt eine Supabase-Konfiguration.");
+    const { data, error } = await db
+      .from("stickers")
+      .insert({ country_id: countryId, sticker_number: stickerNumber })
+      .select()
+      .single();
+    if (error) throw error;
+    return data;
+  },
+
+  async updateSticker(stickerId, stickerNumber) {
+    const db = await client();
+    if (!db) throw new Error("Die Katalogpflege benötigt eine Supabase-Konfiguration.");
+    const { data, error } = await db
+      .from("stickers")
+      .update({ sticker_number: stickerNumber })
+      .eq("id", stickerId)
+      .select()
+      .single();
+    if (error) throw error;
+    return data;
+  },
+
+  async deleteSticker(stickerId) {
+    const db = await client();
+    if (!db) throw new Error("Die Katalogpflege benötigt eine Supabase-Konfiguration.");
+    const { error } = await db.from("stickers").delete().eq("id", stickerId);
     if (error) throw error;
   },
 
