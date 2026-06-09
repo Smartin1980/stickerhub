@@ -119,6 +119,14 @@ function groupedMissingStickers() {
   }, {});
 }
 
+function exportTimestamp() {
+  return new Intl.DateTimeFormat("de-CH", {
+    dateStyle: "medium",
+    timeStyle: "short",
+    timeZone: "Europe/Zurich"
+  }).format(new Date());
+}
+
 function missingListText() {
   const groups = Object.values(groupedMissingStickers());
   const lines = groups.map(({ country, numbers }) =>
@@ -126,11 +134,13 @@ function missingListText() {
   );
   return [
     `StickerHub Fehlliste von ${profile?.display_name || "Sammler"}`,
+    `Stand: ${exportTimestamp()} Uhr`,
     `${missingStickers().length} fehlende Sticker`,
     "",
     ...lines,
     "",
-    "Erstellt mit StickerHub"
+    "Erstellt mit StickerHub - Fussball-WM-Sticker online verwalten und tauschen:",
+    "https://stickerhub.bsone.ch/"
   ].join("\n");
 }
 
@@ -146,6 +156,7 @@ document.querySelector("#export-pdf").addEventListener("click", () => {
     return;
   }
   const doc = new window.jspdf.jsPDF();
+  const timestamp = exportTimestamp();
   const pageHeight = doc.internal.pageSize.getHeight();
   const pageWidth = doc.internal.pageSize.getWidth();
   const footerTop = pageHeight - 24;
@@ -205,7 +216,11 @@ document.querySelector("#export-pdf").addEventListener("click", () => {
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
   doc.text(`${profile?.display_name || "Sammler"} · ${missing.length} fehlende Sticker`, 16, y);
-  y += 7;
+  y += 4;
+  doc.setTextColor(104, 116, 138);
+  doc.text(`Stand: ${timestamp} Uhr`, 16, y);
+  doc.setTextColor(20, 34, 58);
+  y += 6;
 
   Object.values(groupedMissingStickers()).forEach(({ country, numbers }) => {
     const countryLabel = `${country.name} (${country.code})`;
