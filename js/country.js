@@ -136,6 +136,7 @@ function missingListText() {
 
 document.querySelector("#export-pdf").addEventListener("click", () => {
   const missing = missingStickers();
+  const websiteUrl = "https://stickerhub.bsone.ch/";
   if (!missing.length) {
     toast("Glückwunsch, deine Fehlliste ist leer.");
     return;
@@ -147,25 +148,47 @@ document.querySelector("#export-pdf").addEventListener("click", () => {
   const doc = new window.jspdf.jsPDF();
   const pageHeight = doc.internal.pageSize.getHeight();
   const pageWidth = doc.internal.pageSize.getWidth();
-  const footerTop = pageHeight - 18;
+  const footerTop = pageHeight - 30;
+  let qrCodeImage = null;
   let y = 22;
+
+  if (window.QRCode) {
+    const qrContainer = document.createElement("div");
+    new window.QRCode(qrContainer, {
+      text: websiteUrl,
+      width: 128,
+      height: 128,
+      colorDark: "#0a1d38",
+      colorLight: "#ffffff",
+      correctLevel: window.QRCode.CorrectLevel.M
+    });
+    qrCodeImage = qrContainer.querySelector("canvas")?.toDataURL("image/png") || null;
+  }
 
   function addFooter() {
     doc.setDrawColor(215, 173, 82);
     doc.line(16, footerTop, pageWidth - 16, footerTop);
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(9);
+    doc.setFontSize(10);
     doc.setTextColor(10, 29, 56);
-    doc.text("StickerHub", 16, footerTop + 6);
+    doc.text("StickerHub", 16, footerTop + 7);
     doc.setFont("helvetica", "normal");
     doc.setFontSize(8);
     doc.setTextColor(104, 116, 138);
     doc.text(
-      "Deine FIFA 2026 Stickersammlung online verwalten und tauschen",
-      38,
-      footerTop + 6
+      "Deine Fussball-WM-Stickersammlung online verwalten und tauschen",
+      16,
+      footerTop + 13
     );
-    doc.text("stickerhub.bsone.ch", pageWidth - 16, footerTop + 6, { align: "right" });
+    doc.setTextColor(23, 64, 111);
+    doc.textWithLink("stickerhub.bsone.ch", 16, footerTop + 20, { url: websiteUrl });
+    if (qrCodeImage) {
+      const qrSize = 22;
+      const qrX = pageWidth - 16 - qrSize;
+      const qrY = footerTop + 3;
+      doc.addImage(qrCodeImage, "PNG", qrX, qrY, qrSize, qrSize);
+      doc.link(qrX, qrY, qrSize, qrSize, { url: websiteUrl });
+    }
     doc.setTextColor(20, 34, 58);
   }
 
