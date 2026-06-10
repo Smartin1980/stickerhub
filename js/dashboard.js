@@ -1,5 +1,5 @@
 import { store } from "./store.js?v=20260610-4";
-import { exportStickerListPdf, shareStickerListWhatsApp } from "./sticker-export.js?v=20260610-3";
+import { exportStickerListPdf, shareStickerListWhatsApp } from "./sticker-export.js?v=20260610-4";
 import { collectionStats, escapeHtml, initShell, toast } from "./ui.js?v=20260610-4";
 
 function countrySummary(country, stickers) {

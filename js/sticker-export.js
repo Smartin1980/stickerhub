@@ -75,29 +75,31 @@ export function exportStickerListPdf(stickers, profile, type, notify) {
   const timestamp = exportTimestamp();
   const pageHeight = doc.internal.pageSize.getHeight();
   const pageWidth = doc.internal.pageSize.getWidth();
-  const footerTop = pageHeight - 24;
+  const pageBottom = pageHeight - 14;
+  const promoHeight = 20;
   const qrCodeImage = createQrCodeImage();
   const numberFontSize = Math.min(11, Math.max(8, Number(profile?.pdf_number_font_size) || 9));
   const numberLineHeight = numberFontSize * 0.5;
   let y = 15;
 
-  function addFooter() {
+  function addPromotion() {
+    const promoTop = pageHeight - 26;
     doc.setDrawColor(215, 173, 82);
-    doc.line(16, footerTop, pageWidth - 16, footerTop);
+    doc.line(16, promoTop, pageWidth - 16, promoTop);
     doc.setFont("helvetica", "bold");
     doc.setFontSize(9);
     doc.setTextColor(10, 29, 56);
-    doc.text("StickerHub", 16, footerTop + 6);
+    doc.text("StickerHub", 16, promoTop + 6);
     doc.setFont("helvetica", "normal");
     doc.setFontSize(7);
     doc.setTextColor(104, 116, 138);
-    doc.text("Fussball-WM-Sticker online verwalten und tauschen", 16, footerTop + 11);
+    doc.text("Fussball-WM-Sticker online verwalten und tauschen", 16, promoTop + 11);
     doc.setTextColor(23, 64, 111);
-    doc.textWithLink("stickerhub.bsone.ch", 16, footerTop + 16, { url: WEBSITE_URL });
+    doc.textWithLink("stickerhub.bsone.ch", 16, promoTop + 16, { url: WEBSITE_URL });
     if (qrCodeImage) {
       const qrSize = 17;
       const qrX = pageWidth - 16 - qrSize;
-      const qrY = footerTop + 2;
+      const qrY = promoTop + 2;
       doc.addImage(qrCodeImage, "PNG", qrX, qrY, qrSize, qrSize);
       doc.link(qrX, qrY, qrSize, qrSize, { url: WEBSITE_URL });
     }
@@ -105,7 +107,6 @@ export function exportStickerListPdf(stickers, profile, type, notify) {
   }
 
   function addPage() {
-    addFooter();
     doc.addPage();
     y = 14;
   }
@@ -137,7 +138,7 @@ export function exportStickerListPdf(stickers, profile, type, notify) {
     doc.setFontSize(numberFontSize);
     const numberLines = doc.splitTextToSize(numbers.join(", "), 174);
     const blockHeight = countryLines.length * 4 + numberLines.length * numberLineHeight + 3;
-    if (y + blockHeight > footerTop - 2) addPage();
+    if (y + blockHeight > pageBottom) addPage();
 
     doc.setFont("helvetica", "bold");
     doc.setFontSize(9);
@@ -155,7 +156,8 @@ export function exportStickerListPdf(stickers, profile, type, notify) {
     y += numberLines.length * numberLineHeight + 3;
   });
 
-  addFooter();
+  if (y + promoHeight > pageHeight - 6) addPage();
+  addPromotion();
   doc.save(`${config.filename}-${new Date().toISOString().slice(0, 10)}.pdf`);
 }
 
