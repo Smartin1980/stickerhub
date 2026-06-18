@@ -34,6 +34,8 @@ Environment:
   ```powershell
   .\scripts\use-sftp-stg.cmd
   ```
+- Confirm `js/config.js` contains the stg Supabase project:
+  - `dlucnxhpqulhirhqtabw`
 - Confirm `.vscode/sftp.json` uses:
   - Host: `ftp.bsone.ch`
   - Protocol: `ftp`

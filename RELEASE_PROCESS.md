@@ -58,10 +58,19 @@ gitignored. Activate the right target before uploading:
 
 The scripts refuse to switch to `stg` unless the current Git branch is `stg`,
 and refuse to switch to production unless the current Git branch is `main`.
+They also copy the matching Supabase frontend config into `js/config.js`, so
+the deployed app points at the correct Supabase project.
 
 Before uploading stg:
 
 1. Stay on branch `stg`.
-2. Put the stg Supabase URL and public anon key into `js/config.js`.
+2. Run `.\scripts\use-sftp-stg.cmd`.
 3. Upload the static frontend files to the stg webroot.
 4. Do not upload `.git`, `.vscode`, `.tools`, or private notes.
+
+Before uploading production:
+
+1. Stay on branch `main`.
+2. Run `.\scripts\use-sftp-prod.cmd`.
+3. Verify `js/config.js` contains the production Supabase project.
+4. Upload the static frontend files to the production webroot.
