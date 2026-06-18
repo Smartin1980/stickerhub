@@ -1,10 +1,15 @@
 .DS_Store
 Thumbs.db
 *.log
+.env
+.env.*
+!.env.example
+!.env.*.example
 dashboard-preview.png
 mobile-preview.png
 
 supabase/helper.txt
 .vscode/sftp.json
-.vscode/helper.txt
+.vscode/helper*.txt
+.vscode/*.local.json
 .tools/

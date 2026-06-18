@@ -1,0 +1,33 @@
+{
+  "name": "Hostpoint stg",
+  "host": "ftp.bsone.ch",
+  "protocol": "ftp",
+  "port": 21,
+  "username": "mselva@stickerhub-stg.bsone.ch",
+  "remotePath": "/",
+  "uploadOnSave": false,
+  "ignore": [
+    ".vscode",
+    ".git",
+    ".tools",
+    ".DS_Store",
+    ".gitignore",
+    ".env",
+    ".env.*",
+    "README.md",
+    "RELEASE_PROCESS.md",
+    "STAGING_CHECKLIST.md",
+    "scripts",
+    "supabase",
+    "js/config.*.example.js",
+    "_private/config.example.php",
+    "_private/config.php",
+    "_private/aktuellebestellnummer*.txt",
+    "_private/logs/**"
+  ],
+  "syncOption": {
+    "delete": false,
+    "skipCreate": false,
+    "ignoreExisting": false
+  }
+}
