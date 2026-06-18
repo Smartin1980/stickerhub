@@ -61,10 +61,10 @@ function render() {
     return;
   }
 
-  const country = collection.countries.find((item) => item.code === code);
+    const country = collection.countries.find((item) => item.code === code);
   if (!country) {
     document.querySelector("#empty").hidden = false;
-    document.querySelector("#empty").textContent = "Land wurde nicht gefunden.";
+    document.querySelector("#empty").textContent = "Stickergruppe wurde nicht gefunden.";
     return;
   }
   document.querySelector("#page-title").textContent = country.name;
@@ -118,7 +118,7 @@ countryGrid.addEventListener("click", async (event) => {
     if (favorite) favoriteCountryIds.add(String(countryId));
     else favoriteCountryIds.delete(String(countryId));
     render();
-    toast(favorite ? "Land zu Favoriten hinzugefügt." : "Land aus Favoriten entfernt.");
+    toast(favorite ? "Stickergruppe zu Favoriten hinzugefügt." : "Stickergruppe aus Favoriten entfernt.");
   } catch (error) {
     toast(error.message, "error");
     button.disabled = false;
