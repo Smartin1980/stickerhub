@@ -8,44 +8,56 @@
   <link rel="icon" href="assets/logo-mark.svg" type="image/svg+xml">
   <link rel="stylesheet" href="css/styles.css">
 </head>
-<body class="legal-page">
-  <div class="legal-layout">
-    <header class="legal-header">
-      <div class="legal-header-inner">
-        <a class="brand" href="index.html"><span class="brand-mark">SH</span> StickerHub</a>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="dashboard.html"><span class="brand-mark">SH</span> StickerHub</a>
+      <nav class="nav-list" aria-label="Hauptnavigation">
+        <a class="nav-link" href="dashboard.html">Dashboard</a>
+        <a class="nav-link" href="version.html">Versionshistorie</a>
+        <a class="nav-link active" href="impressum.html">Impressum</a>
+        <a class="nav-link" href="datenschutz.html">Datenschutz</a>
+      </nav>
+      <nav class="sidebar-footer" aria-label="Service">
+        <a href="version.html" id="sidebar-version">Version</a>
+      </nav>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <a class="brand" href="dashboard.html"><span class="brand-mark">SH</span> StickerHub</a>
+      </header>
+      <div class="legal-content">
+        <p class="eyebrow">Rechtliches</p>
+        <h1>Impressum</h1>
+
+        <section class="card legal-section">
+          <h2>Betreiber</h2>
+          <p>
+            StickerHub wird betrieben von Martin Selva / bsOne, Schweiz.
+          </p>
+          <p>
+            Kontakt: <a href="mailto:support@stickerhub.bsone.ch">support@stickerhub.bsone.ch</a>
+          </p>
+        </section>
+
+        <section class="card legal-section">
+          <h2>Verantwortung für Inhalte</h2>
+          <p>
+            Die Inhalte dieser Website werden mit Sorgfalt erstellt. Für Richtigkeit,
+            Vollständigkeit und Aktualität kann dennoch keine Gewähr übernommen werden.
+          </p>
+        </section>
+
+        <section class="card legal-section">
+          <h2>Externe Links</h2>
+          <p>
+            Diese Website kann Links zu externen Angeboten enthalten. Für deren Inhalte
+            sind ausschliesslich die jeweiligen Betreiber verantwortlich.
+          </p>
+        </section>
       </div>
-    </header>
-    <main class="legal-content" data-public-meta>
-      <p class="eyebrow">Rechtliches</p>
-      <h1>Impressum</h1>
-
-      <section class="card legal-section">
-        <h2>Betreiber</h2>
-        <p>
-          StickerHub wird betrieben von Martin Selva / bsOne, Schweiz.
-        </p>
-        <p>
-          Kontakt: <a href="mailto:support@stickerhub.bsone.ch">support@stickerhub.bsone.ch</a>
-        </p>
-      </section>
-
-      <section class="card legal-section">
-        <h2>Verantwortung fuer Inhalte</h2>
-        <p>
-          Die Inhalte dieser Website werden mit Sorgfalt erstellt. Fuer Richtigkeit,
-          Vollstaendigkeit und Aktualitaet kann dennoch keine Gewaehr uebernommen werden.
-        </p>
-      </section>
-
-      <section class="card legal-section">
-        <h2>Externe Links</h2>
-        <p>
-          Diese Website kann Links zu externen Angeboten enthalten. Fuer deren Inhalte
-          sind ausschliesslich die jeweiligen Betreiber verantwortlich.
-        </p>
-      </section>
     </main>
   </div>
-  <script type="module" src="js/public-shell.js?v=20260619-1"></script>
+  <script type="module" src="js/version-history.js?v=20260619-1"></script>
 </body>
 </html>

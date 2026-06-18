@@ -13,11 +13,14 @@ function escapeHtml(value = "") {
 function renderHistory() {
   const versionBadge = document.querySelector("#current-version");
   const versionDate = document.querySelector("#current-version-date");
+  const sidebarVersion = document.querySelector("#sidebar-version");
   const history = document.querySelector("#version-history");
-  if (!history) return;
 
   if (versionBadge) versionBadge.textContent = `Version ${APP_VERSION}`;
   if (versionDate) versionDate.textContent = APP_VERSION_DATE;
+  if (sidebarVersion) sidebarVersion.textContent = `Version ${APP_VERSION}`;
+  if (!history) return;
+
   history.innerHTML = VERSION_HISTORY.map((entry) => `
     <article class="card release-card">
       <div class="release-card-header">
