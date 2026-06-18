@@ -7,10 +7,10 @@ export const VERSION_HISTORY = [
     date: "2026-06-19",
     title: "Version, Rechtliches und Release-Basis",
     changes: [
-      "Versionsnummer sichtbar in der App und auf den oeffentlichen Seiten.",
-      "Neue Versionshistorie mit nachvollziehbaren Aenderungen.",
-      "Impressum und Datenschutzerklaerung ergaenzt.",
-      "Deployment-Vorbereitung fuer stg/prod klarer benannt und abgesichert."
+      "Versionsnummer sichtbar in der App und auf den öffentlichen Seiten.",
+      "Neue Versionshistorie mit nachvollziehbaren Änderungen.",
+      "Impressum und Datenschutzerklärung ergänzt.",
+      "Deployment-Vorbereitung für stg/prod klarer benannt und abgesichert."
     ]
   },
   {
@@ -20,7 +20,7 @@ export const VERSION_HISTORY = [
     changes: [
       "stg-Branch und stg-Supabase-Projekt vorbereitet.",
       "Staging-Domain stickerhub-stg.bsone.ch eingerichtet und deployed.",
-      "Demo-Daten fuer Admin und normalen Testbenutzer ergaenzt.",
+      "Demo-Daten für Admin und normalen Testbenutzer ergänzt.",
       "Release-Prozess und Staging-Checkliste dokumentiert."
     ]
   },
@@ -29,9 +29,9 @@ export const VERSION_HISTORY = [
     date: "2026-06-10",
     title: "StickerHub Basis",
     changes: [
-      "Sammlung, Laender, Stickerstatus und Favoriten verwalten.",
-      "Tauschboerse, Statistik, Import und Admin-Bereich.",
-      "PDF-/WhatsApp-Export fuer Fehl- und Doppellisten.",
+      "Sammlung, Länder, Stickerstatus und Favoriten verwalten.",
+      "Tauschbörse, Statistik, Import und Admin-Bereich.",
+      "PDF-/WhatsApp-Export für Fehl- und Doppellisten.",
       "Supabase Auth, Rollen und Feature Toggles."
     ]
   }

@@ -118,7 +118,6 @@ export async function initShell(activePage) {
     <header class="topbar">
       <a class="brand" href="${root}dashboard.html"><span class="brand-mark">SH</span> StickerHub</a>
       <div class="topbar-actions">
-        <a class="version-badge" href="${root}version.html">v${APP_VERSION}</a>
         ${store.demoMode ? '<span class="muted">Demo</span>' : ""}
         <a class="avatar" href="${root}profile.html" aria-label="Profil">${initials(profile.display_name)}</a>
       </div>

@@ -122,18 +122,6 @@ img { max-width: 100%; }
 
 .topbar .brand { font-size: 18px; }
 .topbar-actions { display: flex; align-items: center; gap: 10px; }
-.version-badge {
-  display: inline-flex;
-  align-items: center;
-  min-height: 34px;
-  padding: 0 10px;
-  color: var(--navy-800);
-  background: rgba(255, 255, 255, 0.76);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  font-size: 12px;
-  font-weight: 800;
-}
 
 .avatar {
   display: grid;
@@ -436,20 +424,7 @@ p { line-height: 1.55; }
   font-weight: 700;
 }
 .public-meta a:hover { color: var(--navy-700); }
-.legal-page { background: var(--surface); }
-.legal-layout { min-height: 100vh; }
-.legal-header {
-  padding: 24px 18px;
-  color: var(--white);
-  background: var(--navy-950);
-}
-.legal-header-inner,
-.legal-content {
-  width: min(920px, 100%);
-  margin: 0 auto;
-}
-.legal-header .brand { color: var(--white); }
-.legal-content { padding: 30px 18px 54px; }
+.legal-content { width: min(920px, 100%); margin: 0 auto; padding: 24px 18px 54px; }
 .legal-section { margin-top: 18px; }
 .legal-section h2 { margin-bottom: 8px; }
 .legal-list,
