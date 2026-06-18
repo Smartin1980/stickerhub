@@ -1,5 +1,5 @@
 import { store } from "./store.js?v=20260610-3";
-import { escapeHtml, initShell, setLoading, toast } from "./ui.js?v=20260610-3";
+import { escapeHtml, initShell, setLoading, toast } from "./ui.js?v=20260619-1";
 
 const fileInput = document.querySelector("#csv-file");
 const preview = document.querySelector("#preview");

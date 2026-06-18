@@ -1,4 +1,5 @@
 import { store } from "./store.js?v=20260610-4";
+import { APP_VERSION } from "./app-version.js?v=20260619-1";
 
 const pageNames = {
   dashboard: "Dashboard",
@@ -95,6 +96,11 @@ export async function initShell(activePage) {
         ).join("")}
         <a class="nav-link admin-link ${activePage === "admin" ? "active" : ""}"
           href="${root}pages/admin.html" ${profile.role !== "admin" ? "hidden" : ""}>Administration</a>
+      </nav>
+      <nav class="sidebar-footer" aria-label="Service">
+        <a href="${root}version.html">Version ${APP_VERSION}</a>
+        <a href="${root}impressum.html">Impressum</a>
+        <a href="${root}datenschutz.html">Datenschutz</a>
       </nav>
     </aside>`;
   const mobile = `
