@@ -32,7 +32,7 @@ Environment:
 
 - Activate the stg FTP config:
   ```powershell
-  .\scripts\use-sftp-stg.cmd
+  .\scripts\prepare-deploy-stg.cmd
   ```
 - Confirm `js/config.js` contains the stg Supabase project:
   - `dlucnxhpqulhirhqtabw`

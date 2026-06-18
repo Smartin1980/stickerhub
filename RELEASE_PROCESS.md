@@ -52,8 +52,8 @@ The VS Code SFTP extension reads `.vscode/sftp.json`. This file is local and
 gitignored. Activate the right target before uploading:
 
 ```powershell
-.\scripts\use-sftp-stg.cmd
-.\scripts\use-sftp-prod.cmd
+.\scripts\prepare-deploy-stg.cmd
+.\scripts\prepare-deploy-prod.cmd
 ```
 
 The scripts refuse to switch to `stg` unless the current Git branch is `stg`,
@@ -64,13 +64,13 @@ the deployed app points at the correct Supabase project.
 Before uploading stg:
 
 1. Stay on branch `stg`.
-2. Run `.\scripts\use-sftp-stg.cmd`.
+2. Run `.\scripts\prepare-deploy-stg.cmd`.
 3. Upload the static frontend files to the stg webroot.
 4. Do not upload `.git`, `.vscode`, `.tools`, or private notes.
 
 Before uploading production:
 
 1. Stay on branch `main`.
-2. Run `.\scripts\use-sftp-prod.cmd`.
+2. Run `.\scripts\prepare-deploy-prod.cmd`.
 3. Verify `js/config.js` contains the production Supabase project.
 4. Upload the static frontend files to the production webroot.
