@@ -29,7 +29,7 @@ export const VERSION_HISTORY = [
     date: "2026-06-10",
     title: "StickerHub Basis",
     changes: [
-      "Sammlung, Länder, Stickerstatus und Favoriten verwalten.",
+      "Sammlung, Stickerstatus und Favoriten verwalten.",
       "Tauschbörse, Statistik, Import und Admin-Bereich.",
       "PDF-/WhatsApp-Export für Fehl- und Doppellisten.",
       "Supabase Auth, Rollen und Feature Toggles."

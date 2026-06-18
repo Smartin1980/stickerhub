@@ -42,7 +42,7 @@ async function loadDashboard() {
 
     const favorites = new Set(favoriteIds.map(String));
     document.querySelector("#country-preview-title").textContent =
-      favorites.size ? "Favorisierte Länder" : "Länderübersicht";
+      favorites.size ? "Favorisierte Sticker" : "Stickerübersicht";
     const selectedCountries = favorites.size
       ? countries.filter((country) => favorites.has(String(country.id)))
       : countries.slice(0, 4);

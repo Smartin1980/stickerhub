@@ -3,7 +3,7 @@ import { APP_VERSION } from "./app-version.js?v=20260619-1";
 
 const pageNames = {
   dashboard: "Dashboard",
-  country: "Länder",
+  country: "Sticker",
   trades: "Tauschbörse",
   import: "Import",
   statistics: "Statistik",
@@ -19,7 +19,7 @@ function navItems() {
   const root = basePath();
   return [
     ["dashboard", `${root}dashboard.html`, "Übersicht", "⌂"],
-    ["country", `${root}country.html`, "Länder", "▦"],
+    ["country", `${root}country.html`, "Sticker", "▦"],
     ["trades", `${root}trades.html`, "Tauschen", "⇄"],
     ["import", `${root}import.html`, "Import", "+", "collection_import"],
     ["statistics", `${root}pages/statistics.html`, "Statistik", "▥"],
