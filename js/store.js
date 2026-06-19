@@ -7,7 +7,9 @@ const DEMO_USER = {
   email: "demo@stickerhub.ch",
   display_name: "Demo Sammler",
   role: "admin",
-  avatar_url: ""
+  avatar_url: "",
+  is_public: true,
+  pdf_number_font_size: 9
 };
 
 let supabaseClient = null;
@@ -453,7 +455,8 @@ export const store = {
           stickers: sticker,
           profiles: {
             display_name: index % 2 ? "Nina Goal" : state.user.display_name,
-            avatar_url: index % 2 ? "" : state.user.avatar_url
+            avatar_url: index % 2 ? "" : state.user.avatar_url,
+            is_public: true
           }
         }));
       return generated.filter((trade) =>
@@ -463,11 +466,13 @@ export const store = {
     }
     let query = db
       .from("trades")
-      .select("*, stickers(*, countries(*)), profiles!trades_owner_user_id_fkey(display_name,avatar_url)")
-      .eq("status", "available");
+      .select("*, stickers(*, countries(*)), profiles!trades_owner_user_id_fkey(display_name,avatar_url,is_public)")
+      .eq("status", "available")
+      .eq("profiles.is_public", true);
     const { data, error } = await query.order("created_at", { ascending: false });
     if (error) throw error;
     return data.filter((trade) =>
+      trade.profiles?.is_public === true &&
       (!filters.country || trade.stickers.countries.code === filters.country) &&
       (!filters.number || String(trade.stickers.sticker_number) === String(filters.number))
     );
