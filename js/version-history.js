@@ -1,4 +1,4 @@
-import { APP_VERSION, APP_VERSION_DATE, VERSION_HISTORY } from "./app-version.js?v=20260619-1";
+import { APP_VERSION, APP_VERSION_DATE, VERSION_HISTORY } from "./app-version.js?v=20260619-2";
 
 function escapeHtml(value = "") {
   return String(value).replace(/[&<>"']/g, (character) => ({
