@@ -1,4 +1,4 @@
-import { store } from "./store.js?v=20260610-4";
+import { store } from "./store.js?v=20260619-2";
 import { collectionStats, initials, initShell, setLoading, toast } from "./ui.js?v=20260619-1";
 
 const form = document.querySelector("#profile-form");
@@ -31,6 +31,7 @@ form.addEventListener("submit", async (event) => {
     profile = await store.updateProfile({
       display_name: document.querySelector("#display-name").value.trim(),
       avatar_url: document.querySelector("#avatar-url").value.trim() || null,
+      is_public: document.querySelector("#is-public").checked,
       pdf_number_font_size: Number(document.querySelector("#pdf-number-font-size").value)
     });
     document.querySelector("#profile-name").textContent = profile.display_name;
@@ -84,6 +85,7 @@ async function loadProfile() {
     document.querySelector("#profile-email").textContent = profile.email;
     document.querySelector("#display-name").value = profile.display_name;
     document.querySelector("#avatar-url").value = profile.avatar_url || "";
+    document.querySelector("#is-public").checked = profile.is_public !== false;
     document.querySelector("#pdf-number-font-size").value =
       String(profile.pdf_number_font_size || 9);
     document.querySelector("#completion").textContent = `${stats.completion}%`;

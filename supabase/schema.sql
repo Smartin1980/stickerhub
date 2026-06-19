@@ -10,6 +10,7 @@ create table public.profiles (
   display_name text not null default 'Sammler',
   avatar_url text,
   role public.user_role not null default 'user',
+  is_public boolean not null default true,
   created_at timestamptz not null default now()
 );
 
@@ -118,6 +119,7 @@ select
 from public.profiles p
 cross join public.stickers s
 left join public.user_stickers us on us.user_id = p.id and us.sticker_id = s.id
+where p.is_public
 group by p.id, p.display_name;
 
 create or replace function public.get_user_statistics()
@@ -144,6 +146,7 @@ as $$
   from public.profiles p
   cross join public.stickers s
   left join public.user_stickers us on us.user_id = p.id and us.sticker_id = s.id
+  where p.is_public
   group by p.id, p.display_name
   order by completion desc nulls last
   limit 10;
@@ -156,7 +159,7 @@ alter table public.user_stickers enable row level security;
 alter table public.trades enable row level security;
 
 create policy "Profiles visible to authenticated users"
-  on public.profiles for select to authenticated using (true);
+  on public.profiles for select to authenticated using (id = auth.uid() or is_public or public.is_admin());
 create policy "Users update own profile"
   on public.profiles for update to authenticated using (id = auth.uid());
 create policy "Admins manage profiles"
@@ -182,7 +185,15 @@ create policy "Users delete own stickers"
   on public.user_stickers for delete to authenticated using (user_id = auth.uid());
 
 create policy "Trades are readable"
-  on public.trades for select to authenticated using (true);
+  on public.trades for select to authenticated using (
+    owner_user_id = auth.uid()
+    or exists (
+      select 1
+      from public.profiles profile
+      where profile.id = owner_user_id
+        and profile.is_public
+    )
+  );
 create policy "Users publish own trades"
   on public.trades for insert to authenticated with check (owner_user_id = auth.uid());
 create policy "Users update own trades"

@@ -22,6 +22,15 @@
               <div class="field"><label for="display-name">Benutzername</label><input class="input" id="display-name" required></div>
               <div class="field"><label for="avatar-url">Avatar URL</label><input class="input" id="avatar-url" type="url" placeholder="https://..."></div>
               <div class="field">
+                <span class="field-static-label">Sichtbarkeit</span>
+                <label class="switch profile-visibility-switch">
+                  <input id="is-public" type="checkbox">
+                  <span class="switch-track"></span>
+                  <span>Öffentliches Profil</span>
+                </label>
+                <span class="field-help">Öffentliche Profile erscheinen in der Statistik und deine doppelten Sticker werden anderen angezeigt.</span>
+              </div>
+              <div class="field">
                 <label for="pdf-number-font-size">PDF Schriftgrösse der Stickernummern</label>
                 <select class="select" id="pdf-number-font-size">
                   <option value="8">8 pt · Kompakt</option>
@@ -77,6 +86,6 @@
     </form>
   </dialog>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script type="module" src="js/profile.js?v=20260619-1"></script>
+  <script type="module" src="js/profile.js?v=20260619-2"></script>
 </body>
 </html>

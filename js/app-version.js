@@ -1,7 +1,17 @@
-export const APP_VERSION = "0.3.0";
+export const APP_VERSION = "0.4.0";
 export const APP_VERSION_DATE = "2026-06-19";
 
 export const VERSION_HISTORY = [
+  {
+    version: "0.4.0",
+    date: "2026-06-19",
+    title: "Öffentliche Profile",
+    changes: [
+      "Im Profil kann die Sichtbarkeit auf öffentlich oder privat gestellt werden.",
+      "Nur öffentliche Profile erscheinen in der Community-Statistik.",
+      "Doppelte Sticker werden anderen Sammlern nur bei öffentlichen Profilen angezeigt."
+    ]
+  },
   {
     version: "0.3.0",
     date: "2026-06-19",

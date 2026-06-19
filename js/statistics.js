@@ -1,4 +1,4 @@
-import { store } from "./store.js?v=20260610-3";
+import { store } from "./store.js?v=20260619-2";
 import { escapeHtml, initShell, toast } from "./ui.js?v=20260619-1";
 
 async function loadStatistics() {
